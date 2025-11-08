@@ -80,31 +80,36 @@ def load_and_preprocess_session_data(filepath, tasks_to_include=None):
 
         # Extract trial-by-trial data (up to 30 trials per session)
         for trial_num in range(1, 31):
-            # Trial result
-            result_col = f'Single Trial Result - Trial Percent Correct ({trial_num})'
-            if result_col not in df.columns:
+            # Trial result - NEW FORMAT: Use "Trial Analysis - No. Correct (X)"
+            no_correct_col = f'Trial Analysis - No. Correct ({trial_num})'
+            if no_correct_col not in df.columns:
                 continue
 
-            trial_result = row.get(result_col, np.nan)
+            trial_result = row.get(no_correct_col, np.nan)
             if pd.isna(trial_result):
                 continue
 
-            correct = 1 if trial_result == 100 else 0
+            correct = int(trial_result)  # Already 1 or 0
 
-            # Position (if available in new data)
+            # Position - NEW FORMAT
             position_col = f'Trial Analysis - Correct Position ({trial_num})'
-            if position_col in df.columns:
-                position = row.get(position_col, np.nan)
-            else:
-                position = np.nan
+            position = row.get(position_col, np.nan)
 
-            # Latency
+            # Latency - NEW FORMAT
             if correct:
-                latency_col = f'Correct touch latency detail ({trial_num})'
+                latency_col = f'Trial Analysis - Correct Image Response Latency ({trial_num})'
             else:
-                latency_col = f'Blank Touch Latency detail ({trial_num})'
+                latency_col = f'Trial Analysis - Incorrect Image Latency ({trial_num})'
 
-            latency = row.get(latency_col, np.nan)
+            latency_val = row.get(latency_col, np.nan)
+            # Handle '-' as missing data
+            if latency_val == '-' or pd.isna(latency_val):
+                latency = np.nan
+            else:
+                try:
+                    latency = float(latency_val)
+                except (ValueError, TypeError):
+                    latency = np.nan
 
             # Infer chosen side based on task and correctness
             # This will be improved when position data is available
