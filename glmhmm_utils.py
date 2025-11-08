@@ -111,20 +111,24 @@ def load_and_preprocess_session_data(filepath, tasks_to_include=None):
                 except (ValueError, TypeError):
                     latency = np.nan
 
-            # Infer chosen side based on task and correctness
-            # This will be improved when position data is available
-            if task_type in ['LD', 'PI']:
-                # Left is correct
-                chosen_side = 'left' if correct else 'right'
-                correct_side = 'left'
-            elif task_type == 'LD_reversal':
-                # Right is correct (for F cohort) or depends on criterion
-                chosen_side = 'right' if correct else 'left'
-                correct_side = 'right'
+            # Determine correct side and chosen side based on POSITION
+            # Position 1 or 8 = LEFT correct
+            # Position 2 or 11 = RIGHT correct
+            if pd.notna(position):
+                if position in [1, 8]:
+                    correct_side = 'left'
+                    chosen_side = 'left' if correct else 'right'
+                elif position in [2, 11]:
+                    correct_side = 'right'
+                    chosen_side = 'right' if correct else 'left'
+                else:
+                    # Training phases with other positions - assume left-biased
+                    correct_side = 'left'
+                    chosen_side = 'left' if correct else 'right'
             else:
-                # For PD tasks, depends on position
-                chosen_side = 'unknown'
+                # Fallback if position missing (rare)
                 correct_side = 'unknown'
+                chosen_side = 'left' if correct else 'right'
 
             trial_data = {
                 'animal_id': animal_id,
@@ -214,27 +218,34 @@ def create_design_matrix(trial_df, animal_id=None, include_position=False,
     features = []
     feature_names = []
 
-    # Feature 1: Stimulus
-    # For LD tasks: -1 (left correct), +1 (right correct)
-    # For tasks with position: use normalized position
-    if include_position and 'position' in data.columns and data['position'].notna().any():
-        # Use position as continuous stimulus
-        # Positions 1-6 are top row, 7-12 are bottom row
-        # For LD: positions 8 (left) and 11 (right) are used
-        # Normalize to -1 (left) to +1 (right)
-        position = data['position'].fillna(8).values  # Default to left if missing
+    # Feature 1: Stimulus - which side is CORRECT
+    # CORRECTED: Stimulus represents the correct choice side
+    # Position 8 or 1 = LEFT correct (stimulus = -1)
+    # Position 11 or 2 = RIGHT correct (stimulus = +1)
+    # This matches the user's task design:
+    # - LD: position 8 (left), position 11 (right)
+    # - PD: position 1 (left), position 2 (right)
 
-        # Map positions to left-right axis
-        # Positions 1,7 (leftmost) -> -1
-        # Positions 6,12 (rightmost) -> +1
-        position_lr = ((position - 1) % 6) / 2.5 - 1  # Maps 0-5 to -1 to +1
+    stimulus = np.zeros(n_trials)
+    position = data['position'].values
 
-        stimulus = position_lr
-        feature_names.append('stimulus_position')
-    else:
-        # Binary stimulus coding
-        stimulus = np.where(data['is_reversal'], 1, -1)
-        feature_names.append('stimulus')
+    for i in range(n_trials):
+        pos = position[i]
+        if pd.isna(pos):
+            # Default based on task type if position missing
+            stimulus[i] = 1 if data.iloc[i]['is_reversal'] else -1
+        elif pos in [1, 8]:
+            # Positions 1 (PD) or 8 (LD) = LEFT correct
+            stimulus[i] = -1
+        elif pos in [2, 11]:
+            # Positions 2 (PD) or 11 (LD) = RIGHT correct
+            stimulus[i] = +1
+        else:
+            # Other positions (training phases) - infer from task
+            # For LD training, usually left-biased (position 8)
+            stimulus[i] = -1
+
+    feature_names.append('stimulus_correct_side')
 
     features.append(stimulus)
 
