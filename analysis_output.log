@@ -1,0 +1,154 @@
+======================================================================
+COMPLETE GLM-HMM ANALYSIS PIPELINE
+======================================================================
+
+Base directory: /home/user/GLMHMM
+Figure directory: /home/user/GLMHMM/figures
+
+Analysis will generate 30+ figures organized by category
+======================================================================
+
+[STEP 1] Loading data...
+✓ Loading W cohort: W LD Data 11.08 All_processed.csv
+  Loaded 13463 trials from 19 animals
+✓ Loading F cohort: F LD Data 11.08 All_processed.csv
+  Loaded 17697 trials from 36 animals
+
+Using W cohort for analysis
+Position data available: True
+
+[STEP 2] Selecting animal for detailed analysis...
+Selected animal: c1m3
+  Trials: 794
+  Genotype: +
+
+[STEP 3] Creating design matrix and fitting GLM-HMM...
+Design matrix: (794, 5)
+Features: ['stimulus_position', 'bias', 'prev_choice', 'wsls', 'session_progression']
+
+Fitting 3-state GLM-HMM...
+✓ Model converged in 89 iterations
+  Final log-likelihood: -436.47
+
+[STEP 4] Generating core analysis figures...
+  Creating comprehensive summary figure...
+    ✓ Saved: 01_glmhmm_summary_c1m3.png
+  Creating psychometric curves...
+    ✓ Saved: 02_psychometric_curves_c1m3.png
+  Creating state summary table...
+    ✓ Saved: 03_state_summary_table_c1m3.png
+
+✓ Core analysis figures saved to: /home/user/GLMHMM/figures/core_analysis
+
+[STEP 5] Testing Hypothesis 1: Discrete Lapse States...
+
+Lapse Analysis Results:
+  Lapse state: 2
+  Lapse probability: 14.11%
+  Run length ratio: 19.24x
+  Autocorrelation: 0.948
+  Interpretation: ✅ DISCRETE LAPSE STATE - Lapses cluster temporally
+
+✓ Saved: 01_discrete_lapse_comprehensive_c1m3.png
+✓ Hypothesis 1 figures saved to: /home/user/GLMHMM/figures/hypothesis1_discrete_lapses
+
+[STEP 6] Testing Hypothesis 2: Dual-Process Decision Making...
+  Computing latency variability metrics...
+  Identifying deliberative vs procedural states...
+
+State Classifications:
+  State 1: Deliberative/VTE (Dual-process: Deliberative)
+    Accuracy: 60.50%, CV: 0.85
+  State 2: Deliberative/VTE (Dual-process: Deliberative)
+    Accuracy: 50.89%, CV: 0.69
+  State 3: Deliberative/VTE (Dual-process: Deliberative)
+    Accuracy: 56.15%, CV: 0.66
+
+  Testing deliberation → learning correlation...
+  Early deliberation → Final performance: r=0.000, p=1.0000
+  ✗ Not significant
+
+  Generating dual-process figures...
+    ✓ Saved: 01_latency_variability_over_learning.png
+    ✓ Saved: 02_state_classification_dual_process.png
+    ✓ Saved: 03_deliberation_learning_correlation.png
+
+✓ Hypothesis 2 figures saved to: /home/user/GLMHMM/figures/hypothesis2_dual_process
+
+[STEP 7] Analyzing state transitions at reversals...
+  ✓ Saved: 01_state_transitions_reversals.png
+
+[STEP 8] Computing state dwell times...
+
+Dwell Time Summary:
+  State 1.0: Mean=54.8 trials, Median=36.5, n_bouts=8.0
+  State 2.0: Mean=22.4 trials, Median=23.0, n_bouts=5.0
+  State 3.0: Mean=30.5 trials, Median=27.5, n_bouts=8.0
+  ✓ Saved: 02_state_dwell_times.png
+
+[STEP 9] Computing learning efficiency scores...
+
+Learning Efficiency Scores:
+animal_id genotype  learning_efficiency_score  final_accuracy
+     c1m3        +                   0.577212            0.68
+  ✓ Saved: 03_learning_efficiency_scores.png
+
+[STEP 10] Fitting GLM-HMM to multiple animals...
+  Processing c1m3...
+  Processing c1m2...
+  Processing c2m4...
+  Processing c1m4...
+  Processing c2m5...
+
+✓ Individual animal figures saved to: /home/user/GLMHMM/figures/individual_animals
+
+[STEP 11] Comparing genotypes...
+  ✓ Saved: 01_genotype_state_comparison.png
+
+======================================================================
+ANALYSIS COMPLETE!
+======================================================================
+
+genotype_comparison:
+  1 figures generated
+
+additional_analyses:
+  3 figures generated
+
+core_analysis:
+  3 figures generated
+
+individual_animals:
+  5 figures generated
+
+hypothesis2_dual_process:
+  3 figures generated
+
+hypothesis1_discrete_lapses:
+  1 figures generated
+
+======================================================================
+TOTAL: 16 figures generated
+Saved to: /home/user/GLMHMM/figures
+======================================================================
+
+======================================================================
+KEY RESULTS SUMMARY
+======================================================================
+
+Hypothesis 1 (Discrete Lapses):
+  ✅ DISCRETE LAPSE STATE - Lapses cluster temporally
+  Run length ratio: 19.24x
+  Autocorrelation: 0.948
+
+Hypothesis 2 (Dual-Process VTE):
+  Insufficient data for correlation analysis
+
+State Classifications:
+  State 1: Deliberative/VTE
+  State 2: Deliberative/VTE
+  State 3: Deliberative/VTE
+
+======================================================================
+Analysis script completed successfully!
+======================================================================

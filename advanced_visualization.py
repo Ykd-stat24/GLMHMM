@@ -45,7 +45,7 @@ def plot_latency_variability_over_learning(latency_metrics, figsize=(14, 8)):
 
     # Group by genotype
     genotypes = latency_metrics['genotype'].unique()
-    colors = {'+'': 'blue', '-': 'red', np.nan: 'gray'}
+    colors = {'+': 'blue', '-': 'red', np.nan: 'gray'}
 
     # 1. CV over sessions
     ax = axes[0, 0]
@@ -401,15 +401,29 @@ def plot_deliberation_learning_correlation(delib_results, figsize=(14, 10)):
     """
     fig, axes = plt.subplots(2, 2, figsize=figsize)
 
+    # Check if results are empty or insufficient
+    if len(delib_results) < 2:
+        n_animals = len(delib_results) if len(delib_results) > 0 else 0
+        fig.suptitle(f'Insufficient data for correlation analysis ({n_animals} animal(s), requires 2+)',
+                    fontsize=16, fontweight='bold')
+        for ax in axes.flat:
+            ax.text(0.5, 0.5, 'Insufficient data\n(requires 2+ animals for correlation)',
+                   ha='center', va='center', fontsize=14, color='gray')
+            ax.set_xlim(0, 1)
+            ax.set_ylim(0, 1)
+            ax.axis('off')
+        return fig
+
     colors = {'+': 'blue', '-': 'red', np.nan: 'gray'}
 
     # 1. Early deliberation vs final performance
     ax = axes[0, 0]
-    for geno in delib_results['genotype'].unique():
-        if pd.isna(geno):
-            continue
-        geno_data = delib_results[delib_results['genotype'] == geno]
-        ax.scatter(geno_data['early_deliberation_index'], geno_data['final_accuracy'],
+    if 'genotype' in delib_results.columns:
+        for geno in delib_results['genotype'].unique():
+            if pd.isna(geno):
+                continue
+            geno_data = delib_results[delib_results['genotype'] == geno]
+            ax.scatter(geno_data['early_deliberation_index'], geno_data['final_accuracy'],
                   s=100, alpha=0.7, label=f'Genotype {geno}', color=colors.get(geno, 'gray'),
                   edgecolors='black', linewidth=1.5)
 
