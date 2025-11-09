@@ -1,0 +1,11 @@
+,accuracy,accuracy,wsls_ratio,wsls_ratio,latency_cv,latency_cv,side_bias,side_bias
+,mean,std,mean,std,mean,std,mean,std
+detailed_label,,,,,,,,
+Deliberative High-Performance,0.776,0.085,1.206,0.341,0.97,0.366,0.277,0.117
+Disengaged Lapse,0.372,0.142,0.966,0.149,1.067,0.467,0.684,0.158
+Perseverative Left-Bias,0.883,0.006,1.269,0.215,0.984,0.588,0.177,0.052
+Procedural High-Performance,0.809,0.071,1.23,0.369,0.482,0.168,0.22,0.112
+Undefined State 0.0,0.514,0.188,1.072,0.16,1.015,0.453,0.489,0.177
+Undefined State 1.0,0.552,0.139,1.033,0.189,0.879,0.248,0.504,0.143
+Undefined State 2.0,0.554,0.154,0.913,0.262,0.83,0.339,0.446,0.189
+WSLS Strategy,0.746,0.121,2.292,0.737,0.288,,0.345,0.104
