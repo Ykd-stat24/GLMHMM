@@ -1,0 +1,10 @@
+Cohort F - Phase 1 Summary
+==================================================
+Animals analyzed: 35
+States per animal: 3
+
+Genotype Distribution:
+  Unknown: 35 animals
+
+Note: Full state label distribution requires re-running analysis
+Individual animal results available in figures/ directory
