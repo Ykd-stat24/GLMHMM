@@ -376,6 +376,13 @@ def analyze_single_animal_phase1(trial_df, animal_id, cohort, n_states=3):
         'n_trials': len(animal_data)
     }
 
+    # Save results as pickle for summary analysis
+    import pickle
+    pickle_path = OUTPUT_DIR / f'{animal_id}_cohort{cohort}_model.pkl'
+    with open(pickle_path, 'wb') as f:
+        pickle.dump(results, f)
+    print(f"  ✓ Saved model results to {pickle_path.name}")
+
     return results
 
 
