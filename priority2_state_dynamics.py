@@ -192,19 +192,45 @@ class StateDynamicsVisualizer:
             n_trials = mean_probs.shape[0]
             x = np.arange(n_trials)
 
+            # Count states per broad category to determine if we need color variations
+            category_counts = {'Engaged': 0, 'Lapsed': 0, 'Mixed': 0}
+            for s in range(mean_probs.shape[1]):
+                broad_cat, _, _ = broad_categories[s]
+                category_counts[broad_cat] += 1
+
+            # Define base colors and variations
+            color_variations = {
+                'Engaged': ['#2ecc71', '#27ae60', '#1e8449'],  # Green shades
+                'Lapsed': ['#e74c3c', '#c0392b', '#922b21'],   # Red shades
+                'Mixed': ['#f39c12', '#e67e22', '#d68910']     # Orange shades
+            }
+
+            # Define line styles for additional differentiation
+            line_styles = ['-', '--', '-.']
+
+            # Track how many of each category we've plotted
+            category_indices = {'Engaged': 0, 'Lapsed': 0, 'Mixed': 0}
+
             # Plot each state
             for state in range(mean_probs.shape[1]):
                 # Get state label
                 broad_cat, detailed_label, conf = broad_categories[state]
-                label = f'State {state}: {broad_cat}'
 
-                # Get color based on broad category
-                if broad_cat == 'Engaged':
-                    color = '#2ecc71'
-                elif broad_cat == 'Lapsed':
-                    color = '#e74c3c'
-                else:  # Mixed
-                    color = '#f39c12'
+                # Determine if we need to differentiate this state
+                cat_idx = category_indices[broad_cat]
+
+                # Get color variation if multiple states of same category
+                if category_counts[broad_cat] > 1:
+                    color = color_variations[broad_cat][cat_idx % 3]
+                    linestyle = line_styles[cat_idx % 3]
+                    label = f'State {state}: {detailed_label}'
+                else:
+                    # Single state of this category - use base color
+                    color = color_variations[broad_cat][0]
+                    linestyle = '-'
+                    label = f'State {state}: {broad_cat}'
+
+                category_indices[broad_cat] += 1
 
                 # Plot mean
                 y = mean_probs[:, state]
@@ -216,7 +242,7 @@ class StateDynamicsVisualizer:
                 x_valid = x[~np.isnan(y)][:len(y_smooth)]
 
                 ax.plot(x_valid, y_smooth, linewidth=2.5, label=label,
-                       color=color, alpha=0.9)
+                       color=color, alpha=0.9, linestyle=linestyle)
                 ax.fill_between(x_valid,
                                np.maximum(0, y_smooth - sem_smooth),
                                np.minimum(1, y_smooth + sem_smooth),
