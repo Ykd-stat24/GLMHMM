@@ -381,9 +381,10 @@ def validate_state_labels(state_metrics, trajectory_df):
         # 1. High accuracy (>65%)
         # 2. LOW latency variability (CV < 0.5)
         # 3. Fast, consistent responses
+        # UPDATED: Relaxed CV threshold from 0.5 to 0.65 for better sensitivity
 
         if accuracy > 0.65:
-            if not np.isnan(latency_cv) and latency_cv < 0.5:
+            if not np.isnan(latency_cv) and latency_cv < 0.65:
                 evidence['low_latency_variability'] = f'CV = {latency_cv:.2f}'
                 evidence['high_accuracy'] = f'{accuracy:.1%}'
                 confidence += 2
@@ -415,6 +416,52 @@ def validate_state_labels(state_metrics, trajectory_df):
         validated[state_id] = (f"Undefined State {state_id}", 0, evidence)
 
     return validated
+
+
+def create_broad_state_categories(validated_labels):
+    """
+    Create broad categorical groupings for easier interpretation.
+
+    Maps detailed state labels to:
+    - "Engaged" (high-performance states)
+    - "Lapsed" (disengaged/poor performance states)
+    - "Mixed" (intermediate or strategic states)
+
+    Parameters:
+    -----------
+    validated_labels : dict
+        {state_id: (label, confidence, evidence)}
+
+    Returns:
+    --------
+    broad_categories : dict
+        {state_id: (broad_category, detailed_label, confidence)}
+    """
+    broad_categories = {}
+
+    engaged_labels = [
+        "Deliberative High-Performance",
+        "Procedural High-Performance"
+    ]
+
+    lapsed_labels = [
+        "Disengaged Lapse",
+        "Perseverative Left-Bias",
+        "Perseverative Right-Bias"
+    ]
+
+    for state_id, (label, confidence, evidence) in validated_labels.items():
+        if any(eng in label for eng in engaged_labels):
+            broad_category = "Engaged"
+        elif any(lap in label for lap in lapsed_labels):
+            broad_category = "Lapsed"
+        else:
+            # WSLS Strategy, Undefined states
+            broad_category = "Mixed"
+
+        broad_categories[state_id] = (broad_category, label, confidence)
+
+    return broad_categories
 
 
 def test_core_hypotheses(trial_df_all_animals, multi_results, metadata_dict):
