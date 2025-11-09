@@ -2,8 +2,81 @@
 Priority 2: Model Cross-Validation (2-5 States)
 ================================================
 
-Tests GLM-HMM models with 2, 3, 4, and 5 states using cross-validation
-to validate the choice of 3 states.
+GOAL: Validate the choice of 3 states by comparing model performance
+      across 2, 3, 4, and 5 state models using k-fold cross-validation.
+
+INPUTS:
+-------
+1. Trial-level behavioral data for each animal:
+   - Choice on each trial (left=0, right=1)
+   - Previous choice and outcome (for WSLS feature)
+   - Session progression, task stage, cumulative experience
+   - Side bias history
+
+2. Design matrix features (7 features, stimulus excluded):
+   - bias: constant term (intercept)
+   - prev_choice: previous choice (-1=left, +1=right)
+   - wsls: win-stay/lose-shift (prev_choice × prev_reward)
+   - session_progression: trial position within session
+   - recent_side_bias: running side preference
+   - task_stage: early/mid/late training indicator
+   - cumulative_experience: total trials experienced
+
+3. Model configurations to test:
+   - n_states: [2, 3, 4, 5]
+   - Each model has:
+     * Transition matrix: (n_states × n_states) - how states switch
+     * GLM weights: (n_states × n_features) - how features predict choices
+     * Initial state distribution: (n_states,) - starting probabilities
+
+CROSS-VALIDATION PROCEDURE:
+---------------------------
+For each animal and each number of states (2-5):
+  1. Split data into K=3 folds (training/test splits)
+  2. For each fold:
+     a. Fit GLM-HMM on training data using EM algorithm
+     b. Compute training log-likelihood (model fit quality)
+     c. Predict test data using Viterbi algorithm (most likely state sequence)
+     d. Compute test accuracy (% correct predictions)
+     e. Calculate AIC and BIC (penalized model fit metrics)
+  3. Average metrics across folds
+
+OUTPUTS/CALCULATIONS:
+---------------------
+For each model configuration:
+
+1. Log-Likelihood (LL):
+   - Measures how well the model explains the data
+   - Higher is better (closer to 0)
+   - Formula: LL = Σ log P(choice_t | state_t, features_t)
+
+2. Test Accuracy:
+   - % of test trials correctly predicted
+   - Uses Viterbi-decoded states + state-specific GLMs
+   - Formula: Accuracy = (# correct predictions) / (# test trials)
+
+3. Akaike Information Criterion (AIC):
+   - Balances model fit and complexity
+   - Lower is better
+   - Formula: AIC = -2*LL + 2*k
+   - where k = n_states*(n_states-1) + n_states*(n_features+1)
+   - Penalizes: transition parameters + GLM parameters per state
+
+4. Bayesian Information Criterion (BIC):
+   - Like AIC but penalizes complexity more heavily
+   - Lower is better
+   - Formula: BIC = -2*LL + k*log(n)
+   - where n = number of training trials
+
+INTERPRETATION:
+---------------
+- If 3-state model has best (lowest) AIC/BIC → validates our choice
+- If accuracy plateaus at 3 states → diminishing returns for complexity
+- If 2-state model is nearly as good → may want simpler model
+- If 4-5 state models are better → may need more states for full picture
+
+The goal is to show that 3 states provides the optimal balance between
+model complexity and explanatory power for this dataset.
 """
 
 import numpy as np
@@ -59,10 +132,34 @@ class ModelValidator:
             # Get training log-likelihood
             train_ll = model.log_likelihood_history[-1] if len(model.log_likelihood_history) > 0 else np.nan
 
-            # Evaluate accuracy on test set
+            # Evaluate on test set
+            # Use viterbi to get most likely state sequence
             test_states = model.viterbi(X_test, y_test)
-            test_probs = model.predict_proba(X_test)  # Marginal probabilities
-            test_acc = np.mean((test_probs > 0.5).astype(int) == y_test)
+
+            # Compute accuracy for each state separately to avoid feature scaling issues
+            test_acc_list = []
+            for i in range(len(X_test)):
+                state = test_states[i]
+                # Use the GLM for this specific state directly
+                # Apply same scaling as training
+                x_test_i = X_test[i:i+1]
+                if model.feature_scaler is not None:
+                    x_scaled = x_test_i.copy()
+                    # Use the TRAINING data's non-constant columns
+                    non_constant_cols = np.where(np.std(X_train, axis=0) > 1e-6)[0]
+                    if len(non_constant_cols) > 0:
+                        x_scaled[:, non_constant_cols] = model.feature_scaler.transform(x_test_i[:, non_constant_cols])
+                else:
+                    x_scaled = x_test_i
+
+                # Predict with this state's GLM
+                from scipy.special import expit
+                logit = x_scaled @ model.glm_weights[state] + model.glm_intercepts[state]
+                prob_1 = expit(logit)[0]
+                pred = 1 if prob_1 > 0.5 else 0
+                test_acc_list.append(pred == y_test[i])
+
+            test_acc = np.mean(test_acc_list)
 
             # Compute information criteria based on training data
             n_params = n_states * (n_states - 1) + \
@@ -80,7 +177,7 @@ class ModelValidator:
             }
 
         except Exception as e:
-            print(f"  Failed: {str(e)[:40]}")
+            print(f"  Failed: {str(e)[:50]}")
             return {
                 'log_likelihood': np.nan,
                 'accuracy': np.nan,
