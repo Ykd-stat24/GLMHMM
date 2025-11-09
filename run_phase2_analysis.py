@@ -548,9 +548,14 @@ def analyze_single_animal_phase2(data_file, ldr_file, animal_id, cohort, n_state
                            animal_dir / f'{animal_id}_adaptation.png')
 
     # Return results
+    genotype = trial_df_rev['genotype'].iloc[0] if 'genotype' in trial_df_rev.columns else metadata.get('genotype', 'Unknown')
+    sex = trial_df_rev['sex'].iloc[0] if 'sex' in trial_df_rev.columns else metadata.get('sex', 'Unknown')
+
     results = {
         'animal_id': animal_id,
         'cohort': cohort,
+        'genotype': genotype,
+        'sex': sex,
         'metadata': metadata,
         'model': model,
         'feature_names': feature_names,
@@ -560,6 +565,13 @@ def analyze_single_animal_phase2(data_file, ldr_file, animal_id, cohort, n_state
         'n_trials': len(trial_df_rev),
         'n_reversals': trial_df_rev['n_reversals_in_session'].sum()
     }
+
+    # Save results as pickle for summary analysis
+    import pickle
+    pickle_path = OUTPUT_DIR / f'{animal_id}_cohort{cohort}_phase2_model.pkl'
+    with open(pickle_path, 'wb') as f:
+        pickle.dump(results, f)
+    print(f"  ✓ Saved model results to {pickle_path.name}")
 
     return results
 
