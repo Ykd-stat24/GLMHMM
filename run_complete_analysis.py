@@ -34,6 +34,11 @@ from glmhmm_utils import (
     plot_glmhmm_summary,
     cross_validate_n_states
 )
+from genotype_sex_comparisons import (
+    plot_genotype_sex_learning_curves,
+    plot_state_occupancy_by_groups,
+    statistical_group_comparisons
+)
 from advanced_analysis import (
     compute_latency_variability_metrics,
     identify_vte_states,
@@ -390,7 +395,8 @@ for animal in animals_to_analyze:
         'X': X_i,
         'y': y_i,
         'metadata': meta_i,
-        'genotype': data_i['genotype'].iloc[0]
+        'genotype': data_i['genotype'].iloc[0],
+        'sex': data_i['sex'].iloc[0]  # Add sex data
     }
 
     # Generate individual summary
@@ -458,6 +464,43 @@ plt.tight_layout()
 fig.savefig(save_dir / '01_genotype_state_comparison.png', dpi=300, bbox_inches='tight')
 plt.close(fig)
 print(f"  ✓ Saved: 01_genotype_state_comparison.png")
+
+# NEW: Enhanced genotype × sex comparisons
+print("\n  Generating enhanced genotype and sex comparison figures...")
+
+# Figure 2: Learning curves by genotype and sex
+try:
+    fig = plot_genotype_sex_learning_curves(trial_df, figsize=(16, 10))
+    fig.savefig(save_dir / '02_genotype_sex_learning_curves.png', dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  ✓ Saved: 02_genotype_sex_learning_curves.png")
+except Exception as e:
+    print(f"  ✗ Error generating learning curves: {e}")
+
+# Figure 3: State occupancy by genotype and sex
+try:
+    fig = plot_state_occupancy_by_groups(multi_results, figsize=(14, 10))
+    fig.savefig(save_dir / '03_state_occupancy_genotype_sex.png', dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  ✓ Saved: 03_state_occupancy_genotype_sex.png")
+except Exception as e:
+    print(f"  ✗ Error generating state occupancy: {e}")
+
+# Statistical comparisons
+print("\n  Running statistical tests for group differences...")
+try:
+    stats_df = statistical_group_comparisons(trial_df, multi_results)
+    if len(stats_df) > 0:
+        print("\nStatistical Comparisons:")
+        print(stats_df[['comparison', 'factor', 'group1', 'group2',
+                       'mean1', 'mean2', 'p_value', 'significant']].to_string(index=False))
+        # Save to CSV
+        stats_df.to_csv(save_dir / 'statistical_comparisons.csv', index=False)
+        print(f"\n  ✓ Saved: statistical_comparisons.csv")
+except Exception as e:
+    print(f"  ✗ Error in statistical tests: {e}")
+
+print(f"\n✓ Genotype/sex comparison figures saved to: {save_dir}")
 
 # ============================================================================
 # SUMMARY
