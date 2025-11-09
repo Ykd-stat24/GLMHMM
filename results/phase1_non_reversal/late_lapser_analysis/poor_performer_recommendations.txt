@@ -1,0 +1,90 @@
+
+RECOMMENDATIONS FOR HANDLING POOR PERFORMERS
+=============================================
+
+FINDINGS:
+---------
+See poor_performer_classification.csv for full details.
+
+QUESTIONS TO ADDRESS:
+---------------------
+1. Are poor performers evenly distributed across genotypes?
+   → If YES: Safe to include all animals
+   → If NO: Poor performers may bias genotype comparisons
+
+2. Do genotype differences persist after excluding poor performers?
+   → If YES: Robust effect, not driven by poor performers
+   → If NO: Effect may be driven by a few bad animals
+
+3. What causes poor performance?
+   - Data quality issues (missing latencies, recording errors)
+   - True behavioral impairment
+   - Motivational issues
+   - Task difficulty (some animals never learn)
+
+ANALYSIS OPTIONS:
+-----------------
+
+Option 1: INCLUDE ALL ANIMALS
+  Pros:
+  - Maximum sample size
+  - No selection bias
+  - Represents full genotype range
+
+  Cons:
+  - Poor performers may obscure real effects
+  - Data quality issues may confound results
+
+Option 2: EXCLUDE POOR PERFORMERS
+  Pros:
+  - Cleaner signal
+  - Focus on animals that learned task
+  - Reduces noise from data quality issues
+
+  Cons:
+  - Reduced sample size
+  - Selection bias
+  - May miss important phenotypes
+
+Option 3: STRATIFIED ANALYSIS
+  - Report results both ways (all animals + good performers only)
+  - Test if genotype effects are consistent across both
+  - Most transparent approach
+
+  RECOMMENDED for your analyses
+
+Option 4: CONTROL FOR PERFORMANCE
+  - Include overall accuracy as covariate in statistical models
+  - Tests if genotype effects persist after accounting for ability
+  - Separates "learning impairment" from "strategy differences"
+
+SPECIFIC RECOMMENDATIONS FOR YOUR DATA:
+---------------------------------------
+
+1. For GLM-HMM state analyses:
+   → Keep all animals (states may capture poor performance)
+   → But mark poor performers in visualizations
+   → Test if state distributions differ for good vs poor performers
+
+2. For genotype comparisons:
+   → Use stratified analysis (Option 3)
+   → Report both including and excluding poor performers
+   → Check if conclusions change
+
+3. For manuscript:
+   → Clearly define "poor performer" criteria
+   → Report n excluded and reasons
+   → Show data with and without poor performers in supplement
+
+4. For F-/- genotype specifically:
+   → Many have data quality issues (NaN latencies)
+   → Consider excluding animals with >50% missing data
+   → May need manual review of raw data files
+
+NEXT STEPS:
+-----------
+1. Review poor_performer_classification.csv
+2. Decide on exclusion criteria (if any)
+3. Re-run key analyses with/without poor performers
+4. Compare results to assess robustness
+5. Document decisions and rationale for manuscript
