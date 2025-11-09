@@ -1,0 +1,147 @@
+
+TRANSITION MATRIX COMPARISON GUIDE
+===================================
+
+WHAT IS A TRANSITION MATRIX?
+-----------------------------
+A transition matrix shows the probability of switching between behavioral states.
+
+Each cell (i,j) = P(transitioning from state i to state j)
+
+Example:
+        To: Engaged  Lapsed  Mixed
+  From:
+  Engaged    0.85     0.10    0.05    → 85% stay engaged, 10% lapse, 5% mixed
+  Lapsed     0.20     0.70    0.10    → 70% stay lapsed, 20% recover to engaged
+  Mixed      0.40     0.20    0.40    → 40% stay mixed, 40% to engaged, 20% lapse
+
+INTERPRETING THE MATRIX:
+------------------------
+1. **Diagonal values (self-transitions)**:
+   - High values (>0.7): State is stable, animals tend to stay in state
+   - Low values (<0.5): State is transient, animals frequently switch
+
+2. **Off-diagonal values (state switches)**:
+   - Large values indicate common transitions
+   - Small values indicate rare transitions
+
+3. **Row patterns**:
+   - Each row sums to 1.0 (probabilities)
+   - Compare rows to understand "exit patterns" from each state
+
+HOW TO COMPARE BETWEEN GENOTYPES:
+----------------------------------
+
+1. **Visual Comparison**:
+   - Look for differences in color patterns
+   - Compare diagonal values (state stability)
+   - Check which off-diagonal transitions are prominent
+
+2. **Key Metrics to Compare**:
+
+   a) **State Persistence** (diagonal values):
+      - P(Engaged → Engaged): How stable is engaged state?
+      - P(Lapsed → Lapsed): Do animals get "stuck" in lapsed state?
+      - Higher persistence = more stable states
+
+   b) **Recovery Rate** (Lapsed → Engaged):
+      - P(Lapsed → Engaged): How quickly do animals recover?
+      - Higher values = better recovery
+      - Genotype differences here may indicate resilience
+
+   c) **Lapse Entry** (Engaged → Lapsed):
+      - P(Engaged → Lapsed): How often do animals lose focus?
+      - Lower values = more stable performance
+      - Higher values = more vulnerable to distraction
+
+   d) **Mixed State Dynamics**:
+      - P(Mixed → Engaged): Progressing toward expertise?
+      - P(Mixed → Lapsed): Falling into disengagement?
+
+3. **Statistical Comparison**:
+
+   For each cell (i,j), compare genotypes:
+   - Compute mean transition probability across animals
+   - Compute standard deviation (shown as ± values)
+   - Larger SD = more heterogeneity within genotype
+
+   Example comparison:
+   - Genotype +/+: P(Engaged → Engaged) = 0.85 ± 0.05
+   - Genotype -/-: P(Engaged → Engaged) = 0.70 ± 0.12
+
+   Interpretation:
+   - +/+ animals have more stable engaged state
+   - -/- animals have more variable performance
+
+4. **Patterns to Look For**:
+
+   a) **"Sticky" states**:
+      - One state has very high self-transition (>0.9)
+      - Suggests animals get "trapped" in that state
+
+   b) **Cyclic patterns**:
+      - Strong A→B and B→A transitions
+      - Suggests oscillation between states
+
+   c) **Unidirectional flow**:
+      - Strong A→B but weak B→A
+      - Suggests learning progression or deterioration
+
+   d) **Random switching**:
+      - All off-diagonal values similar (~1/3 for 3 states)
+      - Suggests no structured state dynamics
+
+EXAMPLE INTERPRETATIONS:
+------------------------
+
+**High-Performing Genotype:**
+  - High P(Engaged → Engaged): 0.85+ (stable performance)
+  - Low P(Engaged → Lapsed): <0.10 (resistant to distraction)
+  - High P(Lapsed → Engaged): >0.30 (quick recovery)
+  - P(Lapsed → Lapsed): <0.60 (don't get stuck)
+
+**Impaired Genotype:**
+  - Lower P(Engaged → Engaged): 0.60-0.70 (less stable)
+  - Higher P(Engaged → Lapsed): 0.20-0.30 (more distractible)
+  - Lower P(Lapsed → Engaged): <0.20 (slow recovery)
+  - Higher P(Lapsed → Lapsed): >0.70 (stuck in lapse)
+
+STATISTICAL TESTS:
+------------------
+To formally test genotype differences:
+
+1. **Cell-by-cell t-tests**:
+   - For each transition (i→j), compare genotypes
+   - Correct for multiple comparisons (Bonferroni or FDR)
+
+2. **Matrix distance metrics**:
+   - Frobenius norm: ||Matrix1 - Matrix2||
+   - Measures overall similarity
+   - Can use permutation tests for significance
+
+3. **Key transition comparisons**:
+   - Focus on theoretically important transitions
+   - Reduces multiple comparison burden
+   - e.g., only test recovery and lapse entry rates
+
+COHORT-SPECIFIC NOTES:
+----------------------
+
+Your data shows:
+  - Cohort W: Generally well-defined states
+  - Cohort F: Some genotypes have "Undefined" states
+    → May have less clear state structure
+    → Transitions harder to interpret
+
+For genotypes with undefined states:
+  - Transitions may not have clear behavioral meaning
+  - Consider whether 3-state model is appropriate
+  - May need to focus on defined states only
+
+RECOMMENDATIONS:
+----------------
+1. Create a table comparing key transitions across genotypes
+2. Focus on biologically meaningful transitions
+3. Report both mean and variability (SD)
+4. Consider effect sizes, not just statistical significance
+5. Relate transition patterns to behavioral outcomes
