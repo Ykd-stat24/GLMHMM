@@ -3,8 +3,25 @@ Cohort F - Phase 1 Summary
 Animals analyzed: 35
 States per animal: 3
 
-Genotype Distribution:
-  Unknown: 35 animals
+State Label Distribution:
 
-Note: Full state label distribution requires re-running analysis
-Individual animal results available in figures/ directory
+State 0:
+  Undefined State 0.0: 17/35 (48.6%)
+  Deliberative High-Performance: 8/35 (22.9%)
+  Disengaged Lapse: 7/35 (20.0%)
+  WSLS Strategy: 1/35 (2.9%)
+  Procedural High-Performance: 1/35 (2.9%)
+  Perseverative Left-Bias: 1/35 (2.9%)
+
+State 1:
+  Undefined State 1.0: 13/35 (37.1%)
+  Disengaged Lapse: 11/35 (31.4%)
+  Deliberative High-Performance: 9/35 (25.7%)
+  WSLS Strategy: 2/35 (5.7%)
+
+State 2:
+  Undefined State 2.0: 16/35 (45.7%)
+  Deliberative High-Performance: 11/35 (31.4%)
+  Disengaged Lapse: 5/35 (14.3%)
+  Procedural High-Performance: 2/35 (5.7%)
+  Perseverative Left-Bias: 1/35 (2.9%)
