@@ -1,0 +1,83 @@
+
+LEARNING CURVE METHODOLOGY
+==========================
+
+DATA SOURCE:
+-----------
+Uses trial-level 'correct' field (choice_correct), NOT "End Summary - Percentage Correct"
+
+CALCULATION:
+------------
+1. Load all trial-level data for each animal
+2. Sort by animal_id, session_date, trial_num
+3. Compute rolling 30-trial accuracy for each animal
+   - Window: 30 trials, centered
+   - Handles edge effects with min_periods=1
+4. Group trials into sessions (~30 trials per session)
+5. Compute session-level statistics:
+   - Mean accuracy across animals in genotype
+   - SEM (standard error of mean)
+6. Plot genotype-averaged learning curve
+
+CODE:
+-----
+g_tri['session'] = g_tri.groupby('animal_id').cumcount() // 30
+g_tri['rolling_acc'] = g_tri.groupby('animal_id')['correct'].transform(
+    lambda x: x.rolling(30, min_periods=1, center=True).mean())
+
+sess_stats = g_tri.groupby('session').agg({
+    'rolling_acc': ['mean', 'sem'],
+    'animal_id': 'nunique'
+}).reset_index()
+
+F COHORT DECLINE - WHY VALUES GO DOWN:
+======================================
+
+OBSERVED PATTERN:
+-----------------
+Several F cohort genotypes show declining accuracy in later sessions.
+
+POSSIBLE EXPLANATIONS:
+
+1. **Task Progression / Difficulty**:
+   - Animals progress from easier to harder task stages
+   - Phase 1 includes multiple task types:
+     * LD (easier)
+     * Punish Incorrect (medium)
+     * Pairwise Discrimination (harder)
+   - Later sessions may have more PD trials → lower accuracy
+
+2. **Reversal Learning**:
+   - Some animals received reversal blocks
+   - Reversals cause temporary accuracy drops
+   - Would show as decline in learning curve
+
+3. **Motivational Changes**:
+   - Satiation effects (less motivated in later sessions)
+   - Habituation to task
+   - Reduced effort/engagement
+
+4. **Sample Size Effects**:
+   - Fewer animals in later sessions (some didn't complete all stages)
+   - Smaller N → more variability, potential bias
+
+5. **Genotype-Specific Patterns**:
+   - Some genotypes may have different learning dynamics
+   - Could reflect true biological differences
+   - F-/- genotype shows high accuracy but short engagement bouts
+
+RECOMMENDATION TO INVESTIGATE:
+------------------------------
+1. Separate learning curves by task type (LD vs PD vs PI)
+2. Check sample size (n animals) at each session timepoint
+3. Examine individual animal trajectories (not just averages)
+4. Compare early vs late session task distributions
+5. Check if decline coincides with task transitions
+
+NEXT STEPS:
+-----------
+Would you like me to:
+  a) Create task-specific learning curves?
+  b) Visualize sample sizes across sessions?
+  c) Plot individual animal trajectories?
+  d) Analyze task distribution over time?
