@@ -111,6 +111,29 @@ def load_and_preprocess_session_data(filepath, tasks_to_include=None):
                 except (ValueError, TypeError):
                     latency = np.nan
 
+            # VTE MEASURES - NEW
+            # Trial duration (Condition)
+            condition_col = f'Trial Analysis - Condition ({trial_num})'
+            trial_duration_val = row.get(condition_col, np.nan)
+            if trial_duration_val == '-' or pd.isna(trial_duration_val):
+                trial_duration = np.nan
+            else:
+                try:
+                    trial_duration = float(trial_duration_val)
+                except (ValueError, TypeError):
+                    trial_duration = np.nan
+
+            # Reward collection latency
+            reward_lat_col = f'Trial Analysis - Reward Collection Latency ({trial_num})'
+            reward_lat_val = row.get(reward_lat_col, np.nan)
+            if reward_lat_val == '-' or pd.isna(reward_lat_val):
+                reward_collection_latency = np.nan
+            else:
+                try:
+                    reward_collection_latency = float(reward_lat_val)
+                except (ValueError, TypeError):
+                    reward_collection_latency = np.nan
+
             # Determine correct side and chosen side based on POSITION
             # Position 1 or 8 = LEFT correct
             # Position 2 or 11 = RIGHT correct
@@ -142,6 +165,8 @@ def load_and_preprocess_session_data(filepath, tasks_to_include=None):
                 'correct_side': correct_side,
                 'position': position,
                 'latency': latency,
+                'trial_duration': trial_duration,  # NEW - VTE measure
+                'reward_collection_latency': reward_collection_latency,  # NEW - VTE measure
                 'genotype': row.get('Genotype', np.nan),
                 'sex': row.get('Sex', np.nan),
             }
