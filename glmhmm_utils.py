@@ -43,9 +43,9 @@ def load_and_preprocess_session_data(filepath, tasks_to_include=None):
 
     # Default task filtering
     if tasks_to_include is None:
-        # Include LD-related tasks
+        # Include LD-related tasks AND Pairwise Discrimination tasks
         ld_schedules = [s for s in df['Schedule name'].unique()
-                       if 'LD' in s or 'Punish Incorrect' in s]
+                       if 'LD' in s or 'Punish Incorrect' in s or 'Pairwise Discrimination' in s]
     else:
         ld_schedules = tasks_to_include
 
@@ -58,22 +58,24 @@ def load_and_preprocess_session_data(filepath, tasks_to_include=None):
         session_date = row['Schedule run date']
         schedule_name = row['Schedule name']
 
-        # Determine task type
-        if 'reversal' in schedule_name.lower():
-            is_reversal = True
-            task_type = 'LD_reversal'
-        elif 'LD 1 choice' in schedule_name or 'LD Must Touch' in schedule_name or 'LD Initial Touch' in schedule_name:
-            is_reversal = False
-            task_type = 'LD'
+        # Determine task type - check specific tasks FIRST, then reversal status
+        # This prevents all reversal tasks from being mislabeled as LD_reversal
+
+        if 'Pairwise Discrimination' in schedule_name:
+            # Pairwise Discrimination (PD) or its reversal
+            is_reversal = 'Reversal' in schedule_name or 'reversal' in schedule_name.lower()
+            task_type = 'PD' + ('_reversal' if is_reversal else '')
         elif 'Punish Incorrect' in schedule_name:
+            # Punish Incorrect (PI) - can be LD-based or PD-based
             is_reversal = False
             if 'LD' in schedule_name:
                 task_type = 'PI'
             else:
                 task_type = 'PD_PI'  # Pairwise discrimination PI
-        elif 'Pairwise Discrimination' in schedule_name:
-            is_reversal = 'Reversal' in schedule_name
-            task_type = 'PD' + ('_reversal' if is_reversal else '')
+        elif 'LD 1 choice' in schedule_name or 'LD Must Touch' in schedule_name or 'LD Initial Touch' in schedule_name or 'LD 1 Reversal' in schedule_name:
+            # Location Discrimination (LD) or its reversal
+            is_reversal = 'reversal' in schedule_name.lower()
+            task_type = 'LD' + ('_reversal' if is_reversal else '')
         else:
             is_reversal = False
             task_type = 'Unknown'
