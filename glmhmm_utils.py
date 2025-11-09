@@ -220,20 +220,28 @@ def create_design_matrix(trial_df, animal_id=None, include_position=False,
 
     # Feature 1: Stimulus - which side is CORRECT
     # CORRECTED: Stimulus represents the correct choice side
-    # Position 8 or 1 = LEFT correct (stimulus = -1)
-    # Position 11 or 2 = RIGHT correct (stimulus = +1)
-    # This matches the user's task design:
-    # - LD: position 8 (left), position 11 (right)
-    # - PD: position 1 (left), position 2 (right)
+    # Task-specific position mappings:
+    # - LD 1 choice: position 8 = LEFT correct (stimulus = -1)
+    # - LD reversal: position 8 OR 11 depending on reversal state
+    # - PD: position 1 = LEFT, position 2 = RIGHT
+    # - Punish Incorrect: positions 7, 8, 9 = ALL LEFT correct (stimulus = -1)
 
     stimulus = np.zeros(n_trials)
     position = data['position'].values
+    task_type = data['task_type'].values
 
     for i in range(n_trials):
         pos = position[i]
-        if pd.isna(pos):
+        task = task_type[i]
+
+        # Punish Incorrect: LEFT (7,8,9) is ALWAYS correct
+        # Even if mouse touches right (10,11,12), left was the correct answer
+        if task == 'PI' or task == 'PD_PI':
+            stimulus[i] = -1  # Left always correct in PI
+        elif pd.isna(pos):
             # Default based on task type if position missing
             stimulus[i] = 1 if data.iloc[i]['is_reversal'] else -1
+        # Standard LD/PD position mappings
         elif pos in [1, 8]:
             # Positions 1 (PD) or 8 (LD) = LEFT correct
             stimulus[i] = -1
@@ -241,8 +249,7 @@ def create_design_matrix(trial_df, animal_id=None, include_position=False,
             # Positions 2 (PD) or 11 (LD) = RIGHT correct
             stimulus[i] = +1
         else:
-            # Other positions (training phases) - infer from task
-            # For LD training, usually left-biased (position 8)
+            # Other positions (training phases) - default to left
             stimulus[i] = -1
 
     feature_names.append('stimulus_correct_side')
@@ -276,6 +283,45 @@ def create_design_matrix(trial_df, animal_id=None, include_position=False,
         session_prog = data['session_index'].values / data['session_index'].max()
         features.append(session_prog)
         feature_names.append('session_progression')
+
+    # Feature 6: Recent side bias (NEW - for PD tasks especially)
+    # Proportion of RIGHT choices in last 10 trials
+    recent_side_bias = np.zeros(n_trials)
+    window_size = 10
+    for i in range(n_trials):
+        start_idx = max(0, i - window_size)
+        recent_choices = choice_encoding[start_idx:i]
+        if len(recent_choices) > 0:
+            # Convert -1/+1 to 0/1, then take mean
+            recent_side_bias[i] = (recent_choices + 1).sum() / (2 * len(recent_choices))
+        else:
+            recent_side_bias[i] = 0.5  # No history = neutral
+    features.append(recent_side_bias)
+    feature_names.append('recent_side_bias')
+
+    # Feature 7: Task stage (training progression)
+    # Numerical encoding of task difficulty/progression
+    task_stage_map = {
+        'LD Initial Touch': 0,
+        'LD Must Touch': 1,
+        'PI': 2,  # LD Punish Incorrect
+        'LD': 3,  # LD 1 choice v2
+        'LD_reversal': 4,  # LD 1 choice reversal
+        'PD_PI': 5,  # Pairwise Punish Incorrect
+        'PD': 6,  # Pairwise Discrimination
+        'PD_reversal': 7,  # Pairwise Discrimination Reversal
+        'Unknown': 0
+    }
+    task_stage = np.array([task_stage_map.get(t, 0) for t in data['task_type'].values])
+    task_stage_normalized = task_stage / 7.0  # Normalize to 0-1
+    features.append(task_stage_normalized)
+    feature_names.append('task_stage')
+
+    # Feature 8: Cumulative trials (overall training experience)
+    # Proportion of total trials completed so far
+    cumulative_trials = np.arange(n_trials) / n_trials
+    features.append(cumulative_trials)
+    feature_names.append('cumulative_experience')
 
     # Stack features
     X = np.column_stack(features)
