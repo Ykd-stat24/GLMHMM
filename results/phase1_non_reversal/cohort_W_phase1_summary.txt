@@ -1,0 +1,25 @@
+Cohort W - Phase 1 Summary
+==================================================
+Animals analyzed: 19
+States per animal: 3
+
+State Label Distribution:
+
+State 0:
+  Undefined State 0.0: 9/19 (47.4%)
+  Deliberative High-Performance: 7/19 (36.8%)
+  Disengaged Lapse: 3/19 (15.8%)
+
+State 1:
+  Undefined State 1.0: 6/19 (31.6%)
+  Disengaged Lapse: 5/19 (26.3%)
+  Deliberative High-Performance: 5/19 (26.3%)
+  WSLS Strategy: 2/19 (10.5%)
+  Procedural High-Performance: 1/19 (5.3%)
+
+State 2:
+  Undefined State 2.0: 10/19 (52.6%)
+  WSLS Strategy: 3/19 (15.8%)
+  Deliberative High-Performance: 3/19 (15.8%)
+  Disengaged Lapse: 2/19 (10.5%)
+  Perseverative Left-Bias: 1/19 (5.3%)

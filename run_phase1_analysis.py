@@ -40,6 +40,12 @@ from state_validation import (
     compute_comprehensive_state_metrics,
     validate_state_labels
 )
+from state_transitions import (
+    analyze_single_animal_transitions,
+    compare_genotype_transitions,
+    plot_genotype_comparison,
+    create_transition_summary_report
+)
 
 # Set random seed for reproducibility
 np.random.seed(42)
@@ -349,6 +355,11 @@ def analyze_single_animal_phase1(trial_df, animal_id, cohort, n_states=3):
     plot_learning_curves(animal_data, model, animal_id, cohort,
                         animal_dir / f'{animal_id}_learning.png')
 
+    # Transition analysis
+    transition_metrics = analyze_single_animal_transitions(
+        model, validated_labels, animal_id, animal_dir
+    )
+
     # Return results
     genotype = animal_data['genotype'].iloc[0] if 'genotype' in animal_data.columns else 'Unknown'
 
@@ -361,6 +372,7 @@ def analyze_single_animal_phase1(trial_df, animal_id, cohort, n_states=3):
         'state_metrics': state_metrics,
         'trajectory_df': trajectory_df,
         'validated_labels': validated_labels,
+        'transition_metrics': transition_metrics,
         'n_trials': len(animal_data)
     }
 
@@ -408,7 +420,7 @@ def run_cohort_analysis_phase1(data_file, cohort, n_states=3):
 
 
 def create_cohort_summary(cohort_results, cohort, save_dir):
-    """Create summary statistics for cohort."""
+    """Create summary statistics for cohort including transitions."""
     print(f"\nCreating cohort summary for Cohort {cohort}...")
 
     n_animals = len(cohort_results)
@@ -442,6 +454,22 @@ def create_cohort_summary(cohort_results, cohort, save_dir):
         f.write(summary_text)
 
     print(f"✓ Saved summary: {summary_file.name}")
+
+    # Genotype transition analysis
+    print(f"\nAnalyzing genotype differences in state transitions...")
+    genotype_comparison = compare_genotype_transitions(cohort_results)
+
+    # Create genotype comparison plots
+    geno_dir = save_dir / f'cohort_{cohort}_genotype_comparisons'
+    plot_genotype_comparison(genotype_comparison, geno_dir)
+
+    # Create transition summary report
+    transition_report = create_transition_summary_report(
+        genotype_comparison,
+        save_dir / f'cohort_{cohort}_transition_summary.txt'
+    )
+
+    print(f"✓ Genotype transition analysis complete")
 
 
 def main():
