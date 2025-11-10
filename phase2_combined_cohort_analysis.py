@@ -83,13 +83,23 @@ class CombinedCohortReversalAnalysis:
                 # State occupancies
                 broad_cats = model_data['broad_categories']
                 state_occ = {}
-                for state_id in range(len(broad_cats)):
-                    cat = broad_cats[state_id][0]
-                    occ = state_metrics[state_metrics['state'] == state_id]['occupancy'].values[0]
-                    if cat in state_occ:
-                        state_occ[cat] += occ
-                    else:
-                        state_occ[cat] = occ
+                for state_id in range(3):  # Always 3 states
+                    # Handle numpy float keys
+                    key = None
+                    for k in broad_cats.keys():
+                        if int(k) == state_id:
+                            key = k
+                            break
+
+                    if key is not None and key in broad_cats:
+                        cat = broad_cats[key][0]
+                        state_rows = state_metrics[state_metrics['state'] == state_id]
+                        if len(state_rows) > 0:
+                            occ = state_rows['occupancy'].values[0]
+                            if cat in state_occ:
+                                state_occ[cat] += occ
+                            else:
+                                state_occ[cat] = occ
 
                 data.append({
                     'animal_id': animal_id,

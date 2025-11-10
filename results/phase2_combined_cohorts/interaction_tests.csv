@@ -1,0 +1,5 @@
+variable,cohort_main_effect_p,interaction,pooling_justified
+accuracy,0.014995774249597058,Not significant (consistent pattern),True
+wsls,0.9043859649122807,Not significant (consistent pattern),True
+engaged_occ,0.931716586609296,Not significant (consistent pattern),True
+lapsed_occ,0.5516144037313677,Not significant (consistent pattern),True
