@@ -119,8 +119,8 @@ class Phase2ReversalAnalysis:
 
             model.fit(X, y)
 
-            # Get state sequence
-            states = model.predict(X)
+            # Get state sequence (automatically computed during fit)
+            states = model.most_likely_states
 
             # Validate states using comprehensive metrics
             state_metrics = compute_comprehensive_state_metrics(animal_data, model, metadata)
