@@ -147,8 +147,8 @@ class Phase2ReversalAnalysis:
                 'trajectory_df': trajectory_df,
                 'validated_labels': validated_labels,
                 'broad_categories': broad_categories,
-                'log_likelihood': model.log_likelihood_,
-                'n_iterations': model.n_iter_
+                'log_likelihood': model.log_likelihood_history[-1] if model.log_likelihood_history else np.nan,
+                'n_iterations': len(model.log_likelihood_history)
             }
 
             # Save
@@ -156,7 +156,9 @@ class Phase2ReversalAnalysis:
             with open(output_file, 'wb') as f:
                 pickle.dump(results, f)
 
-            print(f"  ✓ Completed (LL={model.log_likelihood_:.1f}, {model.n_iter_} iterations)")
+            ll = model.log_likelihood_history[-1] if model.log_likelihood_history else np.nan
+            n_iter = len(model.log_likelihood_history)
+            print(f"  ✓ Completed (LL={ll:.1f}, {n_iter} iterations)")
 
             return results
 
