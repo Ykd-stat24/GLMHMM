@@ -1,0 +1,76 @@
+================================================================================
+PHASE 2 REVERSAL LEARNING - COMPREHENSIVE ANALYSIS SUMMARY
+================================================================================
+
+================================================================================
+1. STATE TRANSITIONS: PHASE 1 → PHASE 2
+================================================================================
+
+- Genotype (n=10):
+  Engaged State Change: -0.566 ± 0.098
+    Significance: p=0.0003 ***
+  Lapsed State Change: +0.176 ± 0.080
+    Significance: p=0.0558 ns
+
++ Genotype (n=14):
+  Engaged State Change: -0.627 ± 0.104
+    Significance: p=0.0000 ***
+  Lapsed State Change: +0.347 ± 0.112
+    Significance: p=0.0084 **
+
++/- Genotype (n=5):
+  Engaged State Change: -0.568 ± 0.165
+    Significance: p=0.0263 *
+  Lapsed State Change: +0.445 ± 0.213
+    Significance: p=0.1053 ns
+
++/+ Genotype (n=4):
+  Engaged State Change: -0.584 ± 0.162
+    Significance: p=0.0364 *
+  Lapsed State Change: +0.681 ± 0.267
+    Significance: p=0.0838 ns
+
+================================================================================
+3. HIGH vs LOW PERFORMER COMPARISON
+================================================================================
+
+Performance Split: Median Accuracy = 0.339
+
+High Performer (n=17):
+  Accuracy: 0.434 ± 0.018
+  Engaged Occupancy: 0.241 ± 0.074
+  Lapsed Occupancy: 0.212 ± 0.090
+  WSLS: 1.075 ± 0.038
+
+  Genotype Distribution:
+    +: 8 (47.1%)
+    +/-: 3 (17.6%)
+    +/+: 3 (17.6%)
+    -: 2 (11.8%)
+    -/-: 1 (5.9%)
+
+Low Performer (n=17):
+  Accuracy: 0.269 ± 0.011
+  Engaged Occupancy: 0.055 ± 0.027
+  Lapsed Occupancy: 0.516 ± 0.100
+  WSLS: 1.055 ± 0.028
+
+  Genotype Distribution:
+    -: 8 (47.1%)
+    +: 6 (35.3%)
+    +/-: 2 (11.8%)
+    +/+: 1 (5.9%)
+
+Statistical Comparisons (Mann-Whitney U test):
+  Engaged Occupancy: U=204.0, p=0.0277 *
+  Lapsed Occupancy: U=82.5, p=0.0318 *
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+• Reversal learning causes biggest engaged state loss in + genotype (-0.627)
+• High performers spend 0.185 more time in engaged states
+• Low performers spend 0.304 more time in lapsed states
+
+================================================================================
