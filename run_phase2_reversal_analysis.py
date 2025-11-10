@@ -184,6 +184,18 @@ class Phase2ReversalAnalysis:
 
         results = []
         for animal_id in animals:
+            # Check if model already exists
+            output_file = self.results_dir / 'models' / f'{animal_id}_cohort{cohort}_reversal.pkl'
+            if output_file.exists():
+                print(f"  {animal_id}: Model already exists, loading...")
+                try:
+                    with open(output_file, 'rb') as f:
+                        result = pickle.load(f)
+                    results.append(result)
+                    continue
+                except Exception as e:
+                    print(f"  Warning: Could not load existing model ({e}), refitting...")
+
             result = self.run_animal_model(animal_id, cohort, reversal_df)
             if result is not None:
                 results.append(result)
@@ -249,12 +261,27 @@ class Phase2ReversalAnalysis:
             p1_metrics = p1.get('state_metrics', {})
             p2_metrics = p2.get('state_metrics', {})
 
-            # Compute averages across states
-            p1_avg_acc = np.mean([m['accuracy'] for m in p1_metrics.values()])
-            p2_avg_acc = np.mean([m['accuracy'] for m in p2_metrics.values()])
+            # Convert DataFrame to dict if needed
+            if isinstance(p1_metrics, pd.DataFrame):
+                p1_avg_acc = p1_metrics['accuracy'].mean() if 'accuracy' in p1_metrics.columns else np.nan
+                p1_avg_wsls = p1_metrics['wsls_ratio'].mean() if 'wsls_ratio' in p1_metrics.columns else np.nan
+            elif isinstance(p1_metrics, dict) and p1_metrics:
+                p1_avg_acc = np.mean([m['accuracy'] for m in p1_metrics.values()])
+                p1_avg_wsls = np.mean([m['wsls_ratio'] for m in p1_metrics.values()])
+            else:
+                print(f"Skipping {animal_id}: Phase 1 metrics not in expected format")
+                continue
 
-            p1_avg_wsls = np.mean([m['wsls_ratio'] for m in p1_metrics.values()])
-            p2_avg_wsls = np.mean([m['wsls_ratio'] for m in p2_metrics.values()])
+            # Handle Phase 2 metrics
+            if isinstance(p2_metrics, pd.DataFrame):
+                p2_avg_acc = p2_metrics['accuracy'].mean() if 'accuracy' in p2_metrics.columns else np.nan
+                p2_avg_wsls = p2_metrics['wsls_ratio'].mean() if 'wsls_ratio' in p2_metrics.columns else np.nan
+            elif isinstance(p2_metrics, dict) and p2_metrics:
+                p2_avg_acc = np.mean([m['accuracy'] for m in p2_metrics.values()])
+                p2_avg_wsls = np.mean([m['wsls_ratio'] for m in p2_metrics.values()])
+            else:
+                print(f"Skipping {animal_id}: Phase 2 metrics not in expected format")
+                continue
 
             comparisons.append({
                 'animal_id': animal_id,
@@ -269,12 +296,20 @@ class Phase2ReversalAnalysis:
 
         comp_df = pd.DataFrame(comparisons)
 
+        if len(comp_df) == 0:
+            print("\nNo animals with valid Phase 1 and Phase 2 data for comparison.")
+            return comp_df
+
         # Save comparison
         comp_df.to_csv(self.results_dir / 'summary' / f'{cohort}_phase1_vs_phase2_comparison.csv', index=False)
 
         print(f"\nPhase 1 vs Phase 2 Comparison:")
         print(f"  Mean accuracy change: {comp_df['accuracy_change'].mean():.3f}")
         print(f"  Mean WSLS change: {comp_df['wsls_change'].mean():.3f}")
+        print(f"\nBy Genotype:")
+        for geno in comp_df['genotype'].unique():
+            geno_df = comp_df[comp_df['genotype'] == geno]
+            print(f"  {geno}: Acc Δ={geno_df['accuracy_change'].mean():.3f}, WSLS Δ={geno_df['wsls_change'].mean():.3f} (n={len(geno_df)})")
 
         return comp_df
 
