@@ -33,11 +33,11 @@ GENOTYPE_ORDER = ['B6', 'C3H x B6', 'A1D_Wt', 'A1D_Het', 'A1D_KO']
 
 # Color palette for genotypes (consistent across all figures)
 GENOTYPE_COLORS = {
-    'B6': '#3498db',           # Blue
-    'C3H x B6': '#e74c3c',     # Red
-    'A1D_Wt': '#2ecc71',       # Green
-    'A1D_Het': '#f39c12',      # Orange
-    'A1D_KO': '#9b59b6'        # Purple
+    'B6': '#e74c3c',           # Red
+    'C3H x B6': '#000000',     # Black
+    'A1D_Wt': '#FFD700',       # Yellow/Gold
+    'A1D_Het': '#4169E1',      # Blue (Royal Blue)
+    'A1D_KO': '#800000'        # Maroon
 }
 
 # State names with descriptions
