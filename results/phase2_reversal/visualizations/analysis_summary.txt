@@ -1,0 +1,25 @@
+================================================================================
+PHASE 2: REVERSAL LEARNING ANALYSIS SUMMARY
+================================================================================
+
+Total animals analyzed: 34
+  W Cohort: 18 animals
+  F Cohort: 16 animals
+
+Genotype Distribution:
+  W Cohort:
+    +: 8 animals
+    -: 10 animals
+  F Cohort:
+    +: 6 animals
+    +/+: 4 animals
+    +/-: 5 animals
+    -/-: 1 animals
+
+Visualizations Created:
+  1. fig1_reversal_state_characteristics - Behavioral states during reversal
+  2. fig2_psychometric_curves - Performance trajectories
+  3. fig3_reversal_adaptation - Phase 1 vs Phase 2 comparison
+  4. fig4_cross_cohort_combined - Combined cohort analysis
+
+================================================================================
