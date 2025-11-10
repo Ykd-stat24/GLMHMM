@@ -1,0 +1,121 @@
+
+LATENCY CALCULATION IN OUR ANALYSIS
+====================================
+
+QUESTION: How is latency calculated? Are different latencies weighted differently?
+
+ANSWER: We use IMAGE RESPONSE LATENCY only. No weighting.
+
+DETAILED EXPLANATION:
+--------------------
+
+1. **Which Latency Field?**
+
+   Raw data contains multiple latency fields:
+   - "Correct touch latency" - Time to touch correct stimulus
+   - "Blank Touch Latency" - Time to touch blank (incorrect) location
+   - "Reward Collection Latency" - Time to collect reward after correct response
+   - "Trial Analysis - Correct Image Response Latency (N)" - Per-trial correct
+   - "Trial Analysis - Incorrect Image Latency (N)" - Per-trial incorrect
+
+   **We use**: Trial Analysis - [Correct/Incorrect] Image Response Latency
+
+   This is the time from stimulus presentation to first image touch.
+
+2. **How It's Extracted** (from glmhmm_utils.py lines 100-114):
+
+   ```python
+   if correct:
+       latency_col = f'Trial Analysis - Correct Image Response Latency ({trial_num})'
+   else:
+       latency_col = f'Trial Analysis - Incorrect Image Latency ({trial_num})'
+
+   latency_val = row.get(latency_col, np.nan)
+   ```
+
+   - Extracts trial-by-trial response latency
+   - Uses correct image latency for correct trials
+   - Uses incorrect image latency for incorrect trials
+   - Missing values coded as NaN
+
+3. **No Weighting Applied**:
+
+   - We do NOT weight by:
+     * Correct vs incorrect trials
+     * Blank touch latency
+     * Reward collection latency
+
+   - Each trial has one latency value (response time)
+   - All trials weighted equally in CV calculation
+
+4. **Latency CV Calculation**:
+
+   For each behavioral state:
+   ```python
+   latencies = state_trials['latency'].values
+   latency_mean = np.mean(latencies)
+   latency_std = np.std(latencies)
+   latency_cv = latency_std / latency_mean
+   ```
+
+   - CV = Coefficient of Variation = std / mean
+   - Measures relative variability (dimensionless)
+   - High CV = inconsistent responding
+   - Low CV (<0.65) = habitual/procedural responding
+
+5. **Special Cases**:
+
+   - **Missing latencies** (coded as '-' or empty):
+     * Converted to NaN
+     * Excluded from CV calculation
+
+   - **Zero mean latencies**:
+     * Would cause division by zero
+     * Handled by setting CV to NaN
+
+   - **All NaN latencies**:
+     * No valid response times recorded
+     * Entire CV becomes NaN
+     * This is why F-/- animals have NaN CVs!
+
+6. **F-/- Latency CV Issue**:
+
+   Analysis shows F-/- animals have **NaN latency CVs** because:
+
+   Possible causes:
+   a) **Data recording errors**: Latency fields not populated
+   b) **Timeouts**: Animals not responding within time limit
+   c) **Data processing errors**: Latency values coded as '-' or invalid
+   d) **Very low trial counts**: Not enough trials to compute meaningful CV
+
+   **Recommendation**:
+   - Check raw data files for F-/- animals
+   - Verify latency fields are populated
+   - May need to exclude F-/- from latency-based analyses
+
+WHAT LATENCY REPRESENTS:
+------------------------
+
+**Response Latency** = Decision time + motor execution time
+
+- Short latency (~0.5-1s): Fast, possibly habitual responding
+- Medium latency (~1-2s): Normal decision-making
+- Long latency (>3s): Slow/deliberative, or disengaged
+
+**Why CV matters**:
+- Low CV = Consistent strategy (habitual or efficient)
+- High CV = Variable strategy (exploring, switching, uncertain)
+
+DOES NOT INCLUDE:
+-----------------
+- ✗ Reward collection time (measured separately)
+- ✗ ITI touches (not part of trial)
+- ✗ Correction trial latencies
+- ✗ Initiation latency (nose poke to stimulus)
+
+BOTTOM LINE:
+-----------
+- We use simple image response latency (stimulus → touch)
+- No weighting by trial type or outcome
+- F-/- animals have missing latency data → NaN CVs
+- This prevents automated state classification for F-/-

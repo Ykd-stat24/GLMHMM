@@ -1,0 +1,72 @@
+
+GLM WEIGHT MAGNITUDES: Feature Scaling vs Ashwood (2022)
+=========================================================
+
+QUESTION: Why are our GLM weights smaller than Ashwood et al. (2022)?
+
+ANSWER: We use FEATURE SCALING (standardization), they don't.
+
+WHAT IS FEATURE SCALING?
+------------------------
+We apply StandardScaler to all features (except bias/intercept):
+- Centers each feature to mean = 0
+- Scales to standard deviation = 1
+
+This means our features are in "standard deviation units" rather than raw units.
+
+COMPARISON:
+-----------
+
+Ashwood (2022) - RAW FEATURES:
+  • prev_choice: -1 or +1 (raw)
+  • Weight ~ 2.0 means: "Previous right choice increases log-odds of choosing right by 2.0"
+  • Weights in raw behavioral units
+
+Our Approach - STANDARDIZED FEATURES:
+  • prev_choice: Standardized to mean=0, std=1
+  • Weight ~ 0.5 means: "One SD increase in feature increases log-odds by 0.5"
+  • Weights represent EFFECT SIZES
+
+WHY USE FEATURE SCALING?
+-------------------------
+1. **Comparability**: Can directly compare weights across features
+   - Larger |weight| = stronger effect, regardless of original units
+
+2. **Interpretability**: Weights are effect sizes
+   - Weight of 0.8 for WSLS vs 0.3 for prev_choice means WSLS has bigger impact
+
+3. **Numerical stability**: Helps optimization converge faster
+
+4. **Standard practice**: Common in machine learning for mixed-scale features
+
+EXAMPLE FROM OUR DATA:
+----------------------
+Animal c1m1, State 2 (Procedural HP):
+  - prev_choice: -0.238 (standardized)
+  - wsls: +0.124 (standardized)
+  - task_stage: -0.827 (standardized)
+
+Interpretation:
+  - Task stage has LARGEST effect (|0.827|)
+  - Previous choice has moderate effect (|0.238|)
+  - WSLS has smaller effect (|0.124|)
+
+If we hadn't scaled, weights would be in arbitrary units and not comparable!
+
+TYPICAL RANGES:
+---------------
+Ashwood (unstandardized):
+  • bias: 0.5-2.0
+  • prev_choice: 1.0-3.0
+  • wsls: 0.5-1.5
+
+Our data (standardized):
+  • All features: 0.1-1.5 (effect sizes)
+  • Outliers up to ~2.0 for very strong effects
+
+BOTTOM LINE:
+------------
+Smaller weights in our analysis ≠ weaker effects
+They're in different units (effect sizes vs raw units)
+
+Our approach is MORE interpretable because weights are directly comparable!

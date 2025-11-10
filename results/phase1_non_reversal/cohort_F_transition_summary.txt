@@ -1,0 +1,83 @@
+======================================================================
+STATE TRANSITION ANALYSIS SUMMARY
+======================================================================
+
+
++ Genotype (n=13 animals)
+--------------------------------------------------
+
+Transition Probabilities:
+         → State 0  → State 1  → State 2
+State 0    0.869      0.047      0.085
+State 1    0.068      0.874      0.058
+State 2    0.063      0.043      0.893
+
+State Stability (Mean Dwell Times):
+  State 0: 25.6 trials
+  State 1: 27.8 trials
+  State 2: 24.0 trials
+
+Lapse Recovery:
+  Number of lapse bouts: 168
+  Mean lapse duration: 5.7 trials
+  Median lapse duration: 3.0 trials
+
+
++/+ Genotype (n=8 animals)
+--------------------------------------------------
+
+Transition Probabilities:
+         → State 0  → State 1  → State 2
+State 0    0.918      0.046      0.036
+State 1    0.038      0.870      0.092
+State 2    0.038      0.160      0.802
+
+State Stability (Mean Dwell Times):
+  State 0: 38.1 trials
+  State 1: 21.8 trials
+  State 2: 14.9 trials
+
+Lapse Recovery:
+  Number of lapse bouts: 91
+  Mean lapse duration: 6.0 trials
+  Median lapse duration: 3.0 trials
+
+
++/- Genotype (n=7 animals)
+--------------------------------------------------
+
+Transition Probabilities:
+         → State 0  → State 1  → State 2
+State 0    0.840      0.103      0.057
+State 1    0.035      0.946      0.020
+State 2    0.014      0.022      0.964
+
+State Stability (Mean Dwell Times):
+  State 0: 19.6 trials
+  State 1: 45.4 trials
+  State 2: 43.0 trials
+
+Lapse Recovery:
+  Number of lapse bouts: 42
+  Mean lapse duration: 12.6 trials
+  Median lapse duration: 6.5 trials
+
+
+-/- Genotype (n=7 animals)
+--------------------------------------------------
+
+Transition Probabilities:
+         → State 0  → State 1  → State 2
+State 0    0.884      0.048      0.069
+State 1    0.028      0.942      0.030
+State 2    0.140      0.185      0.675
+
+State Stability (Mean Dwell Times):
+  State 0: 15.4 trials
+  State 1: 22.9 trials
+  State 2: 17.9 trials
+
+Lapse Recovery:
+  Number of lapse bouts: 77
+  Mean lapse duration: 11.1 trials
+  Median lapse duration: 8.0 trials

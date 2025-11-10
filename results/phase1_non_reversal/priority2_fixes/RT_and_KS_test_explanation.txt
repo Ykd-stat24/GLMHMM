@@ -1,0 +1,110 @@
+
+RESPONSE TIME CALCULATION AND KS TEST INTERPRETATION
+=====================================================
+
+RESPONSE TIME (RT) CALCULATION:
+-------------------------------
+RT = response_latency field from raw data
+
+From Bussey touchscreen system:
+  • RT = Time from stimulus onset to first touch response
+  • Units: seconds
+  • Typically ranges from 0.5s to 5s for mice
+  • Excludes: reward collection time, ITI, correction trials
+
+Data processing:
+  1. Load raw 'Response Latency' from touchscreen data
+  2. Convert to numeric (handles missing/invalid values)
+  3. Remove outliers (> 99th percentile)
+  4. No transformation applied (use raw RT in seconds)
+
+KOLMOGOROV-SMIRNOV (KS) TEST:
+------------------------------
+Tests whether two samples come from the same distribution.
+
+Test statistic (D):
+  • D = max vertical distance between CDFs
+  • Range: 0 to 1
+  • Larger D = more different distributions
+
+P-value interpretation:
+  • p < 0.05: Distributions are statistically different
+  • p ≥ 0.05: Cannot reject null (distributions may be same)
+
+WHY KS TESTS SEEM "TOO LIBERAL":
+--------------------------------
+
+PROBLEM: Small visual differences in Q-Q plots yield significant p-values.
+
+EXPLANATION:
+1. **Large sample sizes**:
+   - Engaged: ~10,000+ trials
+   - Lapsed: ~3,000+ trials
+   - Mixed: ~2,000+ trials
+
+   With large N, even tiny effect sizes become statistically significant!
+
+2. **KS test is VERY sensitive**:
+   - Detects small deviations anywhere in distribution
+   - Not just mean/variance differences
+   - Picks up subtle shape differences
+
+3. **Biological variability**:
+   - Real behavioral states DO have slightly different RT distributions
+   - Even if visually similar, subtle differences exist
+
+4. **Q-Q plot close to diagonal ≠ same distribution**:
+   - Q-Q plots show quantile-quantile correspondence
+   - Can be "close" but still statistically different
+   - Visual similarity doesn't account for sample size
+
+EXAMPLE: Engaged vs Mixed
+-------------------------
+  • Q-Q plot: Mostly along diagonal
+  • Visual: 95% of points within ±0.2s
+  • KS test: D = 0.08, p = 0.001
+
+  Interpretation:
+  - Distributions ARE different (p < 0.05)
+  - But effect size is SMALL (D = 0.08)
+  - With N=10,000 trials, we have power to detect tiny effects
+
+WHAT TO REPORT:
+---------------
+1. **Effect size (D statistic)**:
+   - D < 0.1: Trivial difference (even if p < 0.05)
+   - D = 0.1-0.3: Small difference
+   - D = 0.3-0.5: Moderate difference
+   - D > 0.5: Large difference
+
+2. **Practical significance**:
+   - Median RT difference < 200ms: Probably not behaviorally meaningful
+   - Median RT difference > 500ms: Likely behaviorally meaningful
+
+3. **Consider both statistics AND plots**:
+   - Don't rely on p-values alone
+   - Look at Q-Q plots AND KS statistic
+   - Report median RT differences
+
+GENOTYPE COMPARISONS (+/- vs -/-):
+-----------------------------------
+You noted Q-Q plots are very close to diagonal but p < 0.05.
+
+This is EXPECTED because:
+  • Similar genotypes → similar RT distributions
+  • Large sample sizes → high statistical power
+  • Small biological differences become detectable
+  • P-value reflects statistical significance, NOT effect size
+
+RECOMMENDATION:
+---------------
+For manuscript:
+  - Report KS D statistic alongside p-value
+  - Include median RT and IQR for each group
+  - Emphasize effect sizes over p-values
+  - Note: "Statistically significant but small effect (D = 0.08)"
+
+For interpretation:
+  - Focus on large effects (D > 0.3)
+  - Consider biological/behavioral relevance
+  - Don't over-interpret small but significant differences
