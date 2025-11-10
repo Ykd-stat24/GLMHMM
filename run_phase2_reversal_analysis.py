@@ -249,23 +249,29 @@ class Phase2ReversalAnalysis:
             p1_metrics = p1.get('state_metrics', {})
             p2_metrics = p2.get('state_metrics', {})
 
+            # Skip if metrics are not in dict format
+            if not isinstance(p1_metrics, dict) or not isinstance(p2_metrics, dict):
+                print(f"Skipping {animal_id}: metrics not in expected format")
+                continue
+
             # Compute averages across states
-            p1_avg_acc = np.mean([m['accuracy'] for m in p1_metrics.values()])
-            p2_avg_acc = np.mean([m['accuracy'] for m in p2_metrics.values()])
+            if p1_metrics and p2_metrics:
+                p1_avg_acc = np.mean([m['accuracy'] for m in p1_metrics.values()])
+                p2_avg_acc = np.mean([m['accuracy'] for m in p2_metrics.values()])
 
-            p1_avg_wsls = np.mean([m['wsls_ratio'] for m in p1_metrics.values()])
-            p2_avg_wsls = np.mean([m['wsls_ratio'] for m in p2_metrics.values()])
+                p1_avg_wsls = np.mean([m['wsls_ratio'] for m in p1_metrics.values()])
+                p2_avg_wsls = np.mean([m['wsls_ratio'] for m in p2_metrics.values()])
 
-            comparisons.append({
-                'animal_id': animal_id,
-                'genotype': p1['genotype'],
-                'p1_accuracy': p1_avg_acc,
-                'p2_accuracy': p2_avg_acc,
-                'p1_wsls': p1_avg_wsls,
-                'p2_wsls': p2_avg_wsls,
-                'accuracy_change': p2_avg_acc - p1_avg_acc,
-                'wsls_change': p2_avg_wsls - p1_avg_wsls
-            })
+                comparisons.append({
+                    'animal_id': animal_id,
+                    'genotype': p1['genotype'],
+                    'p1_accuracy': p1_avg_acc,
+                    'p2_accuracy': p2_avg_acc,
+                    'p1_wsls': p1_avg_wsls,
+                    'p2_wsls': p2_avg_wsls,
+                    'accuracy_change': p2_avg_acc - p1_avg_acc,
+                    'wsls_change': p2_avg_wsls - p1_avg_wsls
+                })
 
         comp_df = pd.DataFrame(comparisons)
 
