@@ -1,0 +1,31 @@
+
+F COHORT DATA QUALITY REPORT
+=============================
+
+Dataset: F LD Data 11.08 All_processed.csv
+Generated: 2025-11-09 23:13:52.771160
+
+SUMMARY:
+--------
+- Total sessions: 666
+- Unique animals: 35
+- Date range: 10/1/2025 13:26 to 9/30/2025 15:56
+- Sessions per animal: 18-20 (mean: 19.0)
+
+ACCURACY:
+---------
+- Mean: 0.424
+- Median: 0.433
+- Std: 0.295
+- Range: 0.000 - 1.000
+
+QUALITY ASSESSMENT:
+-------------------
+- Sessions <40% accuracy: 294 (44.1%)
+- Sessions 40-60% accuracy: 157 (23.6%)
+- Sessions >60% accuracy: 215 (32.3%)
+
+CONCLUSION:
+-----------
+The F LD Data 11.08 All_processed.csv appears to be clean and complete.
+Poor performance appears to be REAL behavioral data, not a processing artifact.
