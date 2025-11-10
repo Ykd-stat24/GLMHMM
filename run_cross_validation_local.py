@@ -39,23 +39,30 @@ DATA_FILES = {
 
 # Select animals to test (smaller subset = faster)
 # Format: (animal_id, cohort)
-# For quick test (10-15 min), use 3-4 animals
-# For comprehensive test (1-2 hours), use 10-15 animals
+# Balanced sample: ~12 animals across genotypes (W+ W- F+ F+/+ F+/- F-/-)
 ANIMALS_TO_TEST = [
-    # W Cohort examples
-    ('c1m1', 'W'),
-    ('c3m1', 'W'),
+    # W Cohort: 5 animals (2-3 per genotype)
+    ('c1m4', 'W'),  # W+
+    ('c2m3', 'W'),  # W+
+    ('c4m1', 'W'),  # W-
+    ('c3m5', 'W'),  # W-
+    ('c3m4', 'W'),  # W-
 
-    # F Cohort examples
-    (11, 'F'),
-    (21, 'F'),
-    (31, 'F'),
-    (61, 'F'),
+    # F Cohort: 7 animals (2 per genotype, except F+ gets 1 extra)
+    (22, 'F'),      # F+
+    (24, 'F'),      # F+
+    (12, 'F'),      # F+
+    (83, 'F'),      # F+/+
+    (84, 'F'),      # F+/+
+    (71, 'F'),      # F+/-
+    (102, 'F'),     # F+/-
+    (103, 'F'),     # F-/-
+    (93, 'F'),      # F-/-
 ]
 
 # Cross-validation settings
 N_STATES_TO_TEST = [2, 3, 4, 5]  # Which model sizes to compare
-N_FOLDS = 3  # Number of cross-validation folds
+N_FOLDS = 5  # Number of cross-validation folds (5 is standard, more robust than 3)
 
 # Output directory
 OUTPUT_DIR = Path('results/phase1_non_reversal/priority2_validation')
@@ -407,9 +414,9 @@ def main():
     print("\nThis script will:")
     print("1. Load your behavioral data")
     print("2. Test models with 2, 3, 4, and 5 hidden states")
-    print("3. Use 3-fold cross-validation to assess performance")
+    print("3. Use 5-fold cross-validation to assess performance")
     print("4. Generate comparison plots and summary statistics")
-    print("\nEstimated runtime: ~5 minutes per animal")
+    print("\nEstimated runtime: ~6-7 minutes per animal (~75-90 min total for 12 animals)")
     print("="*80)
 
     # Verify data files exist

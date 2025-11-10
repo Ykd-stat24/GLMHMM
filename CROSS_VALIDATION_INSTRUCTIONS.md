@@ -16,13 +16,13 @@ python run_cross_validation_local.py
 
 That's it! The script will:
 - Load your data from the OneDrive paths
-- Test 2, 3, 4, and 5 state models on 6 animals
-- Run 3-fold cross-validation for each
+- Test 2, 3, 4, and 5 state models on 12 animals (balanced across genotypes)
+- Run 5-fold cross-validation for each (more robust than 3-fold)
 - Save results to `results/phase1_non_reversal/priority2_validation/`
 
 ### 3. Expected Runtime
-- **Quick test (6 animals)**: ~30 minutes
-- **Each animal takes**: ~5 minutes
+- **Standard test (12 animals, 5-fold CV)**: ~75-90 minutes
+- **Each animal takes**: ~6-7 minutes
 
 ---
 
@@ -30,35 +30,33 @@ That's it! The script will:
 
 ### Change Which Animals to Test
 
-Open `run_cross_validation_local.py` and find the `ANIMALS_TO_TEST` section (around line 40):
+Open `run_cross_validation_local.py` and find the `ANIMALS_TO_TEST` section (around line 43):
 
 ```python
 ANIMALS_TO_TEST = [
     # W Cohort
-    ('c1m1', 'W'),
-    ('c3m1', 'W'),
-
-    # F Cohort
-    (11, 'F'),
-    (21, 'F'),
-    (31, 'F'),
-    (61, 'F'),
+    ('c1m4', 'W'),  # W+
+    ('c2m3', 'W'),  # W+
+    ('c4m1', 'W'),  # W-
+    # ... etc (12 animals total)
 ]
 ```
 
 Add or remove animals as needed. Format is `(animal_id, 'cohort')`.
 
+**Current selection**: 12 animals balanced across all genotypes (W+, W-, F+, F+/+, F+/-, F-/-)
+
 ### Change Model Settings
 
-Find the settings section (around line 48):
+Find the settings section (around line 64):
 
 ```python
 N_STATES_TO_TEST = [2, 3, 4, 5]  # Which model sizes to compare
-N_FOLDS = 3  # Number of cross-validation folds
+N_FOLDS = 5  # Number of cross-validation folds
 ```
 
 - `N_STATES_TO_TEST`: Which model complexities to test
-- `N_FOLDS`: More folds = more robust but slower (3 is standard)
+- `N_FOLDS`: More folds = more robust but slower (5 is standard, good balance)
 
 ### Update Data File Paths
 
@@ -105,8 +103,9 @@ The script creates these files in `results/phase1_non_reversal/priority2_validat
 
 ### Very slow execution
 - Reduce the number of animals in `ANIMALS_TO_TEST`
-- Try with just 2-3 animals first
-- Each animal takes ~5 minutes
+- Try with just 2-3 animals first (~15-20 min)
+- Consider reducing N_FOLDS from 5 to 3 (faster, still good)
+- Each animal takes ~6-7 minutes with 5-fold CV
 
 ### "Animal not found" warning
 - The animal ID doesn't exist in your data file
