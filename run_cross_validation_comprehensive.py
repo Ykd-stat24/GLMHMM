@@ -1,8 +1,13 @@
 """
-Run Cross-Validation on Representative Subset
-==============================================
+Comprehensive Cross-Validation for Both Cohorts
+================================================
 
-Tests 2, 3, 4, and 5 state models to validate our choice of 3 states.
+Tests 2, 3, 4, and 5 state models with larger representative samples
+from each cohort to validate our choice of 3 states.
+
+Strategy:
+- W Cohort: 5-6 animals per genotype (total ~10 animals)
+- F Cohort: 5-6 animals per genotype (total ~18-20 animals)
 """
 
 import numpy as np
@@ -65,42 +70,47 @@ for genotype in ['+', '-', '+/-', '-/-']:
     animals = F_animals[genotype]
     print(f"  {genotype:5s}: {len(animals):2d} animals")
 
-# Select representative subset (2-3 animals per genotype, prioritizing high trial counts)
+# Select larger representative samples
 print("\n" + "="*80)
-print("SELECTING REPRESENTATIVE SUBSET")
+print("SELECTING COMPREHENSIVE SUBSET")
 print("="*80)
 
 selected_animals = []
 
-# W Cohort - select 2 animals per genotype
+# W Cohort - select 4-5 animals per genotype for balanced representation
 print("\nW Cohort:")
-for genotype in ['+', '-', '+/-']:
+for genotype in ['+', '-']:
     animals = W_animals[genotype]
     if len(animals) > 0:
-        # Sort by trial count, select top 2
-        sorted_animals = sorted(animals, key=lambda x: x[1], reverse=True)[:2]
+        # Select top 5 by trial count (or all if fewer than 5)
+        n_select = min(5, len(animals))
+        sorted_animals = sorted(animals, key=lambda x: x[1], reverse=True)[:n_select]
         for animal, n_trials in sorted_animals:
             selected_animals.append((animal, 'W'))
             print(f"  {str(animal):10s} ({genotype:5s}): {n_trials} trials")
 
-# F Cohort - select 2-3 animals per genotype
+# F Cohort - select 5-6 animals per genotype
 print("\nF Cohort:")
-for genotype in ['+', '-', '+/-', '-/-']:
+for genotype in ['+', '+/-', '-/-']:
     animals = F_animals[genotype]
     if len(animals) > 0:
-        # For -/- (largest group), select 3; others select 2
-        n_select = 3 if genotype == '-/-' else 2
+        # For +/- and -/- select more animals (up to 6), for + select 5
+        n_select = min(6 if genotype in ['+/-', '-/-'] else 5, len(animals))
         sorted_animals = sorted(animals, key=lambda x: x[1], reverse=True)[:n_select]
         for animal, n_trials in sorted_animals:
             selected_animals.append((animal, 'F'))
             print(f"  {str(animal):10s} ({genotype:5s}): {n_trials} trials")
 
 print(f"\nTotal selected: {len(selected_animals)} animals")
+print(f"  W Cohort: {sum(1 for a, c in selected_animals if c == 'W')} animals")
+print(f"  F Cohort: {sum(1 for a, c in selected_animals if c == 'F')} animals")
 
 # Run cross-validation
 print("\n" + "="*80)
-print("RUNNING CROSS-VALIDATION")
+print("RUNNING COMPREHENSIVE CROSS-VALIDATION")
 print("="*80)
+print("\nNote: This will take several hours. Results will be saved incrementally.")
+print("You can stop and restart - completed animals won't be re-run.\n")
 
 cv_study = ModelValidator()
 results_df = cv_study.run_validation_study(selected_animals)
@@ -110,6 +120,31 @@ if len(results_df) > 0:
     print("CREATING SUMMARY VISUALIZATIONS")
     print("="*80)
     cv_study.plot_validation_results(results_df)
+
+    # Create cohort-specific summaries
+    print("\n" + "="*80)
+    print("COHORT-SPECIFIC SUMMARIES")
+    print("="*80)
+
+    for cohort in ['W', 'F']:
+        cohort_data = results_df[results_df['cohort'] == cohort]
+        if len(cohort_data) > 0:
+            print(f"\n{cohort} Cohort Summary:")
+            print(f"  Animals tested: {cohort_data['animal_id'].nunique()}")
+            print(f"  Total trials: {cohort_data['n_trials'].sum()}")
+
+            # Best model by AIC
+            best_by_aic = cohort_data.groupby('n_states')['aic'].mean().idxmin()
+            print(f"  Best model (AIC): {best_by_aic} states")
+
+            # Best model by BIC
+            best_by_bic = cohort_data.groupby('n_states')['bic'].mean().idxmin()
+            print(f"  Best model (BIC): {best_by_bic} states")
+
+            # Best accuracy
+            best_acc_states = cohort_data.groupby('n_states')['accuracy'].mean().idxmax()
+            best_acc_val = cohort_data.groupby('n_states')['accuracy'].mean().max()
+            print(f"  Best accuracy: {best_acc_states} states ({best_acc_val:.3f})")
 
     print("\n" + "="*80)
     print("CROSS-VALIDATION COMPLETE")
