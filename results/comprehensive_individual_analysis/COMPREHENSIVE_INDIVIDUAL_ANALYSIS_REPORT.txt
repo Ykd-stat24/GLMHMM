@@ -1,0 +1,171 @@
+# COMPREHENSIVE INDIVIDUAL-LEVEL GLM-HMM ANALYSIS
+
+## Executive Summary
+- **Total animals analyzed:** 54
+- **Genotypes:** A1D_Het, A1D_KO, A1D_Wt, B6, C3H x B6
+- **Phase 1→Phase 2 prediction AUC:** N/A
+- **A1D_KO mixed state prevalence:** 42.9%
+
+## SECTION 1: STATE TRANSITION ANALYSIS
+
+### Key Findings:
+- Transition matrices extracted from all Phase 1 GLM-HMM models
+- Entropy metrics quantify state commitment (higher=more exploratory)
+- Diagonal dominance indicates stability of behavioral states
+
+### Statistical Tests (Kruskal-Wallis across genotypes):
+- **trans_Engaged_to_Engaged:** H=2.709, p=0.6077
+  - A1D_Het: 0.840
+  - A1D_KO: 0.884
+  - A1D_Wt: 0.918
+  - B6: 0.897
+  - C3H x B6: 0.910
+- **trans_Engaged_to_Biased:** H=2.363, p=0.6693
+  - A1D_Het: 0.103
+  - A1D_KO: 0.048
+  - A1D_Wt: 0.046
+  - B6: 0.039
+  - C3H x B6: 0.058
+- **trans_Engaged_to_Lapsed:** H=1.949, p=0.7451
+  - A1D_Het: 0.057
+  - A1D_KO: 0.069
+  - A1D_Wt: 0.036
+  - B6: 0.064
+  - C3H x B6: 0.032
+- **trans_Biased_to_Engaged:** H=2.793, p=0.5931
+  - A1D_Het: 0.035
+  - A1D_KO: 0.028
+  - A1D_Wt: 0.038
+  - B6: 0.046
+  - C3H x B6: 0.068
+- **trans_Biased_to_Biased:** H=0.841, p=0.9328
+  - A1D_Het: 0.946
+  - A1D_KO: 0.942
+  - A1D_Wt: 0.870
+  - B6: 0.890
+  - C3H x B6: 0.912
+- **trans_Biased_to_Lapsed:** H=5.236, p=0.2639
+  - A1D_Het: 0.020
+  - A1D_KO: 0.030
+  - A1D_Wt: 0.092
+  - B6: 0.064
+  - C3H x B6: 0.020
+- **trans_Lapsed_to_Engaged:** H=3.336, p=0.5032
+  - A1D_Het: 0.014
+  - A1D_KO: 0.140
+  - A1D_Wt: 0.038
+  - B6: 0.086
+  - C3H x B6: 0.057
+- **trans_Lapsed_to_Biased:** H=4.341, p=0.3618
+  - A1D_Het: 0.022
+  - A1D_KO: 0.185
+  - A1D_Wt: 0.160
+  - B6: 0.032
+  - C3H x B6: 0.071
+- **trans_Lapsed_to_Lapsed:** H=6.923, p=0.1400
+  - A1D_Het: 0.964
+  - A1D_KO: 0.675
+  - A1D_Wt: 0.802
+  - B6: 0.882
+  - C3H x B6: 0.872
+
+## SECTION 2: INDIVIDUAL-LEVEL BEHAVIORAL PROFILES
+
+### Occupancy Patterns by Genotype:
+
+**A1D_Het** (n=7):
+  - Engaged: 0.152 ± 0.118
+  - Biased: 0.415 ± 0.222
+  - Lapsed: 0.433 ± 0.242
+
+**A1D_KO** (n=7):
+  - Engaged: 0.334 ± 0.152
+  - Biased: 0.435 ± 0.148
+  - Lapsed: 0.231 ± 0.227
+
+**A1D_Wt** (n=8):
+  - Engaged: 0.303 ± 0.134
+  - Biased: 0.453 ± 0.228
+  - Lapsed: 0.243 ± 0.181
+
+**B6** (n=22):
+  - Engaged: 0.355 ± 0.181
+  - Biased: 0.284 ± 0.147
+  - Lapsed: 0.360 ± 0.182
+
+**C3H x B6** (n=10):
+  - Engaged: 0.369 ± 0.139
+  - Biased: 0.336 ± 0.196
+  - Lapsed: 0.295 ± 0.143
+
+### Transition Entropy by Genotype:
+
+**A1D_Het** (n=7):
+  - Mean entropy: 0.269 ± 0.149
+  - Self-transition strength: 0.917 ± 0.066
+
+**A1D_KO** (n=7):
+  - Mean entropy: 0.373 ± 0.186
+  - Self-transition strength: 0.834 ± 0.126
+
+**A1D_Wt** (n=8):
+  - Mean entropy: 0.296 ± 0.061
+  - Self-transition strength: 0.863 ± 0.108
+
+**B6** (n=22):
+  - Mean entropy: 0.292 ± 0.188
+  - Self-transition strength: 0.890 ± 0.110
+
+**C3H x B6** (n=10):
+  - Mean entropy: 0.290 ± 0.180
+  - Self-transition strength: 0.898 ± 0.085
+
+## SECTION 3: PHASE 1 → PHASE 2 PREDICTABILITY
+
+
+## SECTION 4: A1D_KO MIXED STATE CHARACTERIZATION
+
+### Prevalence of Mixed State:
+- **Total A1D_KO animals:** 7
+- **Mixed state animals:** 3 (42.9%)
+- **State balance (mixed threshold):** 0.455
+
+### Bias Type Analysis:
+- Analyzing transition patterns to characterize bias signatures
+- Mean biased self-transition: 0.942
+- Mean engaged→biased transition: 0.048
+
+### Comparison with Other Genotypes:
+
+**A1D_Het** (n=7):
+  - Mean engaged: 0.152 ± 0.118
+  - Mean biased: 0.415 ± 0.222
+  - Mean lapsed: 0.433 ± 0.242
+
+**A1D_KO** (n=7):
+  - Mean engaged: 0.334 ± 0.152
+  - Mean biased: 0.435 ± 0.148
+  - Mean lapsed: 0.231 ± 0.227
+
+**A1D_Wt** (n=8):
+  - Mean engaged: 0.303 ± 0.134
+  - Mean biased: 0.453 ± 0.228
+  - Mean lapsed: 0.243 ± 0.181
+
+**B6** (n=22):
+  - Mean engaged: 0.355 ± 0.181
+  - Mean biased: 0.284 ± 0.147
+  - Mean lapsed: 0.360 ± 0.182
+
+**C3H x B6** (n=10):
+  - Mean engaged: 0.369 ± 0.139
+  - Mean biased: 0.336 ± 0.196
+  - Mean lapsed: 0.295 ± 0.143
+
+## Visualization Outputs
+- `transition_matrices_by_genotype.png` - Heatmaps of state transitions
+- `entropy_stability_analysis.png` - Entropy and self-transition metrics
+- `behavioral_profile_heatmap.png` - Individual animal behavioral features
+- `phase1_to_phase2_predictability.png` - ROC curve and feature importance
+- `phase1_phase2_reversals.png` - Reversal analysis across genotypes
+- `a1d_ko_mixed_state_analysis.png` - A1D_KO state characterization
