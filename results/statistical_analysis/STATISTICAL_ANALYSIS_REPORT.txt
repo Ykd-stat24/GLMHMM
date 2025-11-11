@@ -1,0 +1,199 @@
+
+================================================================================
+PHASE 1: LAPSE METRICS STATISTICAL ANALYSIS
+================================================================================
+
+Data loaded: 54 animals
+Genotypes present: ['A1D_Het', 'A1D_KO', 'A1D_Wt', 'B6', 'C3H x B6']
+
+--------------------------------------------------------------------------------
+LAPSE FREQUENCY ANALYSIS (per 100 trials)
+--------------------------------------------------------------------------------
+
+Kruskal-Wallis H-statistic: 6.2430
+p-value: 0.181718
+Not significant (p = 0.1817)
+
+Descriptive Statistics:
+               N    Mean  Median      SD  Min     Max
+genotype_new                                         
+A1D_Het        7  13.802  14.247  10.628  0.0  24.640
+A1D_KO         7  18.821  21.393   8.967  0.0  25.714
+A1D_Wt         8   7.758   6.415   8.447  0.0  18.750
+B6            22   8.907   0.000  10.864  0.0  27.451
+C3H x B6      10  11.229  12.304  11.206  0.0  31.900
+
+--------------------------------------------------------------------------------
+LAPSE DURATION ANALYSIS (average duration of lapse bouts)
+--------------------------------------------------------------------------------
+
+Kruskal-Wallis H-statistic: 1.9321
+p-value: 0.748245
+Not significant (p = 0.7482)
+
+Descriptive Statistics:
+               N   Mean  Median     SD  Min    Max
+genotype_new                                      
+A1D_Het        7  0.891   1.173  0.621  0.0  1.401
+A1D_KO         7  1.396   1.357  0.804  0.0  2.570
+A1D_Wt         8  1.181   0.542  1.585  0.0  4.317
+B6            22  0.790   0.000  0.933  0.0  2.731
+C3H x B6      10  0.881   1.201  0.795  0.0  1.954
+
+================================================================================
+PHASE 1: LATE LAPSER ANALYSIS
+================================================================================
+
+Total animals: 54
+Late lapsers identified: 30 (55.6%)
+
+Late Lapsers by Genotype:
+genotype_new
+A1D_Het      7
+A1D_KO       4
+A1D_Wt       6
+B6          11
+C3H x B6     2
+
+--------------------------------------------------------------------------------
+PAIRED COMPARISON: Early vs Late Accuracy in Late Lapsers
+--------------------------------------------------------------------------------
+
+Wilcoxon Signed-Rank Test (paired):
+W-statistic: 0.0000
+p-value: 0.000000
+
+Overall Results (all late lapsers):
+  Early Accuracy - Mean: 0.5826, Median: 0.5833
+  Late Accuracy  - Mean: 0.2858, Median: 0.2857
+  Difference     - Mean: -0.2968
+*** SIGNIFICANT: Performance changed significantly (p < 0.05)
+
+--------------------------------------------------------------------------------
+STRATIFIED ANALYSIS: Early vs Late by Genotype
+--------------------------------------------------------------------------------
+
+A1D_Het (N=7):
+  Early Acc:  0.5901 ± 0.0664
+  Late Acc:   0.3467 ± 0.0976
+  Mean Change: -0.2435, Median Change: -0.2310
+  Wilcoxon p: 0.015625
+  *** SIGNIFICANT (p < 0.05)
+
+A1D_KO (N=4):
+  Early Acc:  0.4264 ± 0.1758
+  Late Acc:   0.2084 ± 0.1512
+  Mean Change: -0.2180, Median Change: -0.2355
+  Wilcoxon p: 0.125000
+
+A1D_Wt (N=6):
+  Early Acc:  0.6549 ± 0.0943
+  Late Acc:   0.3110 ± 0.0790
+  Mean Change: -0.3438, Median Change: -0.3556
+  Wilcoxon p: 0.031250
+  *** SIGNIFICANT (p < 0.05)
+
+B6 (N=11):
+  Early Acc:  0.6087 ± 0.1120
+  Late Acc:   0.2478 ± 0.0906
+  Mean Change: -0.3609, Median Change: -0.3444
+  Wilcoxon p: 0.000977
+  *** SIGNIFICANT (p < 0.05)
+
+C3H x B6 (N=2):
+  Early Acc:  0.5082 ± 0.0009
+  Late Acc:   0.3615 ± 0.0250
+  Mean Change: -0.1467, Median Change: -0.1467
+  Wilcoxon p: 0.500000
+
+================================================================================
+PHASE 2: HIGH VS LOW PERFORMER CLASSIFICATION
+================================================================================
+
+Total animals: 34
+High Performers: 17
+Low Performers: 17
+
+--------------------------------------------------------------------------------
+CHI-SQUARE TEST: Genotype Distribution across Performance Groups
+--------------------------------------------------------------------------------
+
+Contingency Table:
+performer_group  High Performer  Low Performer
+genotype_new                                  
+A1D_Het                       3              2
+A1D_KO                        1              0
+A1D_Wt                        3              1
+B6                            8              6
+C3H x B6                      2              8
+
+Chi-Square Test:
+  Chi2 statistic: 6.0857
+  p-value: 0.192838
+  Degrees of freedom: 4
+  Cramér's V: 0.4231
+Not significant (p = 0.1928)
+
+--------------------------------------------------------------------------------
+PERFORMER DISTRIBUTION BY GENOTYPE
+--------------------------------------------------------------------------------
+
+A1D_Het (N=5):
+  High Performers: 3 (60.0%)
+  Low Performers: 2 (40.0%)
+
+A1D_KO (N=1):
+  High Performers: 1 (100.0%)
+  Low Performers: 0 (0.0%)
+
+A1D_Wt (N=4):
+  High Performers: 3 (75.0%)
+  Low Performers: 1 (25.0%)
+
+B6 (N=14):
+  High Performers: 8 (57.1%)
+  Low Performers: 6 (42.9%)
+
+C3H x B6 (N=10):
+  High Performers: 2 (20.0%)
+  Low Performers: 8 (80.0%)
+
+================================================================================
+PHASE 2: STATE TRANSITION STABILITY (Phase 1 → Phase 2)
+================================================================================
+
+Total animals with Phase 1 → Phase 2 data: 34
+
+--------------------------------------------------------------------------------
+ENGAGED STATE: Phase 1 → Phase 2 Changes
+--------------------------------------------------------------------------------
+
+Kruskal-Wallis Test on Engaged State Changes:
+  H-statistic: 1.0776
+  p-value: 0.897804
+
+Descriptive Statistics - Engaged State Change (P2 - P1):
+               N    Mean  Median      SD     Min     Max
+genotype_new                                            
+A1D_Het        5 -0.5677 -0.8093  0.3692 -0.8806 -0.1622
+A1D_KO         1 -0.5407 -0.5407     NaN -0.5407 -0.5407
+A1D_Wt         4 -0.5838 -0.5726  0.3231 -0.8868 -0.3033
+B6            14 -0.6268 -0.7242  0.3894 -1.0000  0.3380
+C3H x B6      10 -0.5661 -0.5951  0.3095 -1.0000 -0.0130
+
+--------------------------------------------------------------------------------
+LAPSED STATE: Phase 1 → Phase 2 Changes
+--------------------------------------------------------------------------------
+
+Kruskal-Wallis Test on Lapsed State Changes:
+  H-statistic: 3.1518
+  p-value: 0.532745
+
+Descriptive Statistics - Lapsed State Change (P2 - P1):
+               N    Mean  Median      SD     Min     Max
+genotype_new                                            
+A1D_Het        5  0.4451  0.4583  0.4771 -0.1194  1.0000
+A1D_KO         1  0.0133  0.0133     NaN  0.0133  0.0133
+A1D_Wt         4  0.6809  0.9201  0.5336 -0.1165  1.0000
+B6            14  0.3465  0.0762  0.4177 -0.0433  0.9778
+C3H x B6      10  0.1760  0.0089  0.2535  0.0000  0.6044

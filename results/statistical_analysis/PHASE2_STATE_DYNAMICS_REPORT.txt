@@ -1,0 +1,80 @@
+
+================================================================================
+PHASE 2: STATE OCCUPANCY DYNAMICS REGRESSION ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+OVERALL LEARNING EFFECTS BY STATE
+--------------------------------------------------------------------------------
+
+Engaged State:
+  Slope: 1.3880 %/100trials
+  Intercept: 31.5190%
+  R-squared: 0.0032
+  p-value: 0.011743
+  Standard Error: 0.5504
+  *** SIGNIFICANT: Engaged occupancy INCREASES over trials (p < 0.05)
+
+Biased State:
+  Slope: 1.4100 %/100trials
+  Intercept: 28.8659%
+  R-squared: 0.0035
+  p-value: 0.008023
+  Standard Error: 0.5313
+  *** SIGNIFICANT: Biased occupancy INCREASES over trials (p < 0.05)
+
+Lapsed State:
+  Slope: -2.7980 %/100trials
+  Intercept: 39.6151%
+  R-squared: 0.0134
+  p-value: 0.000000
+  Standard Error: 0.5378
+  *** SIGNIFICANT: Lapsed occupancy DECREASES over trials (p < 0.05)
+
+--------------------------------------------------------------------------------
+GENOTYPE-SPECIFIC LEARNING RATES (slopes by genotype and state)
+--------------------------------------------------------------------------------
+
+A1D_Het:
+  Engaged: slope=-2.4297 %/100trials, p=0.8104
+  Biased: slope=3.6478 %/100trials, p=0.7377
+  Lapsed: slope=-1.2181 %/100trials, p=0.9211
+
+A1D_KO:
+  Engaged: slope=-2.7676 %/100trials, p=0.2537
+  Biased: slope=4.8840 %/100trials, p=0.0174
+    *** Significant increase
+  Lapsed: slope=-2.1164 %/100trials, p=0.0956
+
+A1D_Wt:
+  Engaged: slope=0.7046 %/100trials, p=0.9203
+  Biased: slope=-11.3293 %/100trials, p=0.0002
+    *** Significant decrease
+  Lapsed: slope=10.6247 %/100trials, p=0.1410
+
+B6:
+  Engaged: slope=2.5230 %/100trials, p=0.0002
+    *** Significant increase
+  Biased: slope=-0.4829 %/100trials, p=0.4446
+  Lapsed: slope=-2.0401 %/100trials, p=0.0041
+    *** Significant decrease
+
+C3H x B6:
+  Engaged: slope=0.6207 %/100trials, p=0.5470
+  Biased: slope=2.2800 %/100trials, p=0.0312
+    *** Significant increase
+  Lapsed: slope=-2.9008 %/100trials, p=0.0005
+    *** Significant decrease
+
+--------------------------------------------------------------------------------
+COMPARISON OF LEARNING RATES ACROSS GENOTYPES
+--------------------------------------------------------------------------------
+
+Engaged State - Slope Comparison Across Genotypes:
+  Kruskal-Wallis H: 3.8759, p: 0.423061
+
+Biased State - Slope Comparison Across Genotypes:
+  Kruskal-Wallis H: 5.4035, p: 0.248341
+
+Lapsed State - Slope Comparison Across Genotypes:
+  Kruskal-Wallis H: 1.2853, p: 0.863857
