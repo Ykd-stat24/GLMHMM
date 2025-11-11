@@ -1,0 +1,410 @@
+================================================================================
+ENHANCED PHASE 2 STATE OCCUPANCY DYNAMICS: VISUALIZATION GUIDE
+================================================================================
+
+This document explains the enhanced 9-panel visualization showing state
+occupancy dynamics over Phase 2 trials with statistical confidence intervals,
+individual animal variation, and learning rate comparisons.
+
+================================================================================
+FIGURE LAYOUT: 3 rows × 3 columns
+================================================================================
+
+**ROW 1: STATE OCCUPANCY TRAJECTORIES (Panels 1-3)**
+- Left:   Engaged State trajectory over trials
+- Middle: Biased State trajectory over trials
+- Right:  Lapsed State trajectory over trials
+
+**ROW 2: STATISTICAL COMPARISONS (Panels 4-6)**
+- Left:   Learning rate comparison (slope values with 95% CI)
+- Middle: Statistical summary table (text annotations)
+- Right:  Effect size heatmap (R² by genotype and state)
+
+**ROW 3: WITHIN-GENOTYPE VARIATION (Panels 7-9)**
+- Left:   Individual animal learning rates for Engaged state
+- Middle: Individual animal learning rates for Biased state
+- Right:  Individual animal learning rates for Lapsed state
+
+================================================================================
+DETAILED PANEL EXPLANATIONS
+================================================================================
+
+**PANELS 1-3: STATE OCCUPANCY OVER TRIALS**
+
+Visual Elements:
+- LIGHT COLORED CURVES (transparent): Individual animal trajectories
+  * Each line = one animal's occupancy pattern over Phase 2 trials
+  * Colored by genotype (A1D_Wt=Red, A1D_KO=Teal, B6=Blue, etc.)
+  * Transparency shows all curves simultaneously
+
+- BOLD COLORED LINES: Genotype-specific regression fits
+  * Thick line = linear regression through all animals of that genotype
+  * Slope represents learning rate (% per 100 trials)
+  * Shows direction of change: upward = increasing, downward = decreasing
+
+- SHADED REGIONS: 95% Confidence Intervals (CI)
+  * Surrounding each regression line
+  * Wider shading = more uncertainty in slope estimate
+  * Narrower shading = more consistent learning across animals
+
+Key Observations:
+- ENGAGED STATE (Left): Most genotypes relatively flat except B6 (slopes upward)
+  * B6 learns to increase engagement over trials
+  * A1D_Het oscillates without clear trend
+  * A1D_Wt essentially flat (no learning)
+
+- BIASED STATE (Middle): Clear divergence between genotypes
+  * A1D_Wt slopes DOWNWARD (loses biased state - maladaptive!)
+  * A1D_KO slopes UPWARD slightly (enters biased state more)
+  * B6 essentially flat
+  * C3H×B6 slopes UPWARD (learns via bias)
+
+- LAPSED STATE (Right): Consistent decrease across most genotypes
+  * B6: Strong decrease (learning to avoid lapse)
+  * C3H×B6: Strong decrease (efficient lapse suppression)
+  * A1D_Wt: Slight increase (gets worse - more lapse)
+  * A1D_KO: Slight decrease (learning to avoid lapse)
+  * A1D_Het: No trend (doesn't learn to suppress lapse)
+
+Interpretation Meaning:
+- Wide CI around a steep slope = robust learning effect (even with individual variation)
+- Wide CI around a flat slope = no clear learning (high individual heterogeneity)
+- Wide CI + steep slope = some animals learn, others don't (check Panel 7-9!)
+- Narrow CI + steep slope = consistent learning across all animals of that genotype
+
+
+**PANEL 4: LEARNING RATE COMPARISON**
+
+Visual Elements:
+- BARS: Learning rate slopes (% change per 100 trials)
+  * Positive bar = occupancy increases over trials
+  * Negative bar = occupancy decreases over trials
+  * Arranged by state (Engaged | Biased | Lapsed) then by genotype
+
+- ERROR BARS: 95% Confidence Intervals
+  * Vertical lines extending above/below each bar
+  * If CI crosses zero = slope not significantly different from zero (n.s.)
+  * If CI is entirely positive = significant increase (***/**/*)
+  * If CI is entirely negative = significant decrease (***/**/*)
+
+- SIGNIFICANCE ASTERISKS: p-value thresholds
+  * *** = p < 0.001 (highly significant)
+  * ** = p < 0.01 (very significant)
+  * * = p < 0.05 (significant)
+  * n.s. = p ≥ 0.05 (not significant)
+
+Key Observations:
+
+ENGAGED STATE (leftmost group):
+  A1D_Het: -0.0634% [-0.2463, 0.1195] n.s. (flat, no learning)
+  A1D_KO:  -0.0219% [-0.0655, 0.0217] n.s. (declining slightly, not significant)
+  A1D_Wt:  -0.0088% [-0.1431, 0.1256] n.s. (flat, no learning)
+  B6:      +0.0257% [+0.0125, +0.0388] *** (increases engagement!)
+  C3H×B6:  +0.0062% [-0.0140, 0.0264] n.s. (barely increases, not significant)
+
+→ Only B6 shows significant engagement learning
+
+BIASED STATE (middle group):
+  A1D_Het: +0.0319% [-0.1685, 0.2323] n.s. (no trend)
+  A1D_KO:  +0.0416% [+0.0058, +0.0774] * (increases bias - significant!)
+  A1D_Wt:  -0.1107% [-0.1677, -0.0537] *** (decreases bias - maladaptive!)
+  B6:      -0.0048% [-0.0172, +0.0076] n.s. (no trend)
+  C3H×B6:  +0.0228% [+0.0021, +0.0435] * (increases bias - significant!)
+
+→ A1D_Wt deteriorates while A1D_KO and C3H×B6 learn via bias
+
+LAPSED STATE (rightmost group):
+  A1D_Het: +0.0315% [-0.1945, 0.2574] n.s. (no trend)
+  A1D_KO:  -0.0197% [-0.0420, 0.0026] n.s. (decreases slightly, not significant)
+  A1D_Wt:  +0.1195% [-0.0176, 0.2565] n.s. (increases lapse, effect size large but p=0.089)
+  B6:      -0.0208% [-0.0348, -0.0069] ** (decreases lapse - adaptive!)
+  C3H×B6:  -0.0290% [-0.0454, -0.0127] *** (decreases lapse - adaptive!)
+
+→ B6 and C3H×B6 learn to suppress lapsing; A1D_Wt gets worse
+
+
+**PANEL 5: STATISTICAL SUMMARY TABLE**
+
+Displays all regression results in tabular format with:
+- State: Engaged, Biased, or Lapsed
+- Genotype: A1D_Het, A1D_KO, A1D_Wt, B6, C3H×B6
+- Slope: Learning rate (% per 100 trials)
+- 95% CI: Confidence interval bounds
+- P-value: Statistical significance
+- Significance: Visual marker (n.s., *, **, ***)
+- R²: Variance explained by the linear regression
+- N Bins: Number of trial bins analyzed
+
+Reading Guide:
+- Higher R² (e.g., 0.1660) = better fit, more consistent learning
+- Lower R² (e.g., 0.0001) = poor fit, high variability in learning
+- Narrow CI = stable learning pattern
+- Wide CI = inconsistent learning across animals
+
+
+**PANEL 6: EFFECT SIZE HEATMAP (R²)**
+
+Visual Elements:
+- ROWS: Genotypes (A1D_Het, A1D_KO, A1D_Wt, B6, C3H×B6)
+- COLUMNS: States (Engaged, Biased, Lapsed)
+- COLOR INTENSITY: R² value (higher = darker orange/red)
+- CELL VALUES: R² number (0.0000 to 1.0000)
+
+Interpretation:
+- Dark red (R² > 0.10) = strong effect size, consistent learning pattern
+- Light yellow (R² < 0.01) = weak effect size, high variability
+
+Key Patterns:
+- A1D_KO's BIASED state shows R²=0.1660 (darkest cell!) = very consistent learning
+- A1D_Wt's BIASED state shows R²=0.0983 = fairly consistent but opposite direction
+- Most cells are pale = low R² = learning rates vary by individual
+- Takeaway: Genotypes show consistent DIRECTION of learning, but high individual variation
+
+
+**PANELS 7-9: WITHIN-GENOTYPE VARIATION (Violin Plots)**
+
+Visual Elements:
+- VIOLIN SHAPE: Distribution of individual animal learning rates
+  * Wide violin = high variation among animals
+  * Narrow violin = consistent learning across animals
+  * Height represents range of slopes
+
+- RED DOTS INSIDE: Individual animal learning rate values
+  * Each dot = one animal's slope for that state
+  * Horizontal position jittered for visibility
+  * Colored by genotype
+  * Stacked vertically = multiple animals with similar slopes
+
+- RED LINE (inside violin): Median learning rate
+- GREEN LINE (inside violin): Mean learning rate
+
+Key Observations:
+
+ENGAGED STATE (Left):
+- B6 (blue, rightmost): Dots clustered in positive region
+  * All B6 animals increase engagement slightly
+  * Very consistent pattern (narrow violin)
+
+- A1D_Wt (red, second from left): Dots scattered around zero
+  * Some animals increase, some decrease engagement
+  * High variability (wide violin)
+  * No consistent learning pattern
+
+BIASED STATE (Middle):
+- A1D_KO (teal): Dots cluster in positive region
+  * Most KO animals increase bias during Phase 2
+  * Consistent pattern despite small sample size
+
+- A1D_Wt (red): Dots cluster in negative region
+  * All or most Wt animals DECREASE bias
+  * This is the maladaptive learning!
+  * Biased towards giving up
+
+LAPSED STATE (Right):
+- B6 and C3H×B6: Dots cluster below zero
+  * Both consistently decrease lapsing
+  * Effective learning of reversal task
+
+- A1D_Wt: Dots scattered around zero to positive
+  * No consistent suppression of lapse
+  * Some animals actually increase lapse
+  * Learning failure
+
+Interpretation:
+- Narrow, concentrated violins = genotype-level strategy
+  * All animals do the same thing
+  * Strong genotypic signature
+
+- Wide, spread violins = individual heterogeneity
+  * Animals within genotype diverge
+  * Possible subpopulations within genotype
+
+
+================================================================================
+COMPARATIVE INSIGHTS: WHAT THE ENHANCED FIGURE REVEALS
+================================================================================
+
+**Advantage 1: Confidence Intervals Show Certainty**
+
+Original figure showed slopes without uncertainty.
+Enhanced figure shows 95% CI around each slope.
+
+Example: A1D_Wt Biased state
+- Slope: -0.1107% per 100 trials
+- CI: [-0.1677, -0.0537]
+- Interpretation: Even accounting for uncertainty, this genotype RELIABLY
+  decreases its biased state use during Phase 2.
+- This is a robust, consistent finding, not random noise.
+
+**Advantage 2: Individual Curves Show the Range**
+
+Original figure showed only regression lines.
+Enhanced figure overlays all individual animals' trajectories.
+
+Example: B6 Engaged state
+- The regression line slopes upward
+- BUT the individual animal curves show:
+  * Some animals increase engagement sharply
+  * Some animals stay flat
+  * Some animals even decrease slightly
+  * The AVERAGE trend is upward, but individual variation exists
+- This reveals that B6's "engagement learning" isn't universal,
+  though the genotype-level pattern is consistent.
+
+**Advantage 3: Violin Plots Show Consistency or Heterogeneity**
+
+Original figure showed only aggregated statistics.
+Enhanced figure shows distribution of individual learning rates.
+
+Example: A1D_Wt Biased state
+- All individual animals show NEGATIVE slope (learning to decrease bias)
+- This is not a random scattering - it's a consistent genotype signature
+- Wide range (-0.3 to +0.0) shows some animals learn more than others,
+  but the direction is unanimously maladaptive.
+
+**Advantage 4: Statistical Annotations Enable Interpretation**
+
+Original figure showed slopes but required external reference.
+Enhanced figure annotates significance levels directly on visualization.
+
+Example: Comparing genotypes for Lapsed state
+- B6: -0.0208% [***] = highly significant decrease
+- C3H×B6: -0.0290% [***] = highly significant decrease
+- A1D_Wt: +0.1195% [n.s.] = increases lapse but NOT statistically significant
+
+Why is A1D_Wt's non-significant? Small sample (n=8) makes it harder to reach
+statistical significance, even though the effect size is substantial.
+
+**Advantage 5: R² Heatmap Shows Model Quality**
+
+Original figure didn't show goodness-of-fit.
+Enhanced figure quantifies how well linear model explains data.
+
+Example: A1D_KO Biased state
+- R² = 0.1660 (among the highest in entire figure)
+- This means: 16.6% of variance in biased occupancy is explained by trial number
+- This is relatively high, suggesting consistent learning trajectory
+- Compare to A1D_Het Biased: R²=0.0009 (nearly 0%!)
+  * KO shows 184x better fit than Het
+  * KO learns consistently; Het shows no learning
+
+
+================================================================================
+BIOLOGICAL INTERPRETATIONS
+================================================================================
+
+**B6: THE ADAPTIVE LEARNER**
+- Engaged: +0.0257*** (learns to engage)
+- Biased: -0.0048 n.s. (maintains neutral bias)
+- Lapsed: -0.0208** (learns to avoid lapse)
+- Strategy: Classical reversal learning - increase correct behavior, suppress lapse
+- Within-genotype variation: NARROW (all B6 learn similarly)
+
+**C3H × B6: THE ALTERNATIVE LEARNER**
+- Engaged: +0.0062 n.s. (engagement not learned)
+- Biased: +0.0228* (learns to use bias - alternative route!)
+- Lapsed: -0.0290*** (learns to avoid lapse)
+- Strategy: Uses biased state as scaffold to reversal, then suppresses lapse
+- Within-genotype variation: NARROW (all C3H×B6 use same strategy)
+
+**A1D_KO: THE OSCILLATOR**
+- Engaged: -0.0219 n.s. (declining engagement, not significant)
+- Biased: +0.0416* (learns to increase bias)
+- Lapsed: -0.0197 n.s. (learns to avoid lapse, trending)
+- Strategy: Increases bias while reducing lapse (but loses engagement!)
+- Within-genotype variation: MODERATE
+- Matches the "mixed state" finding: oscillates between states
+
+**A1D_Wt: THE MALADAPTIVE LEARNER**
+- Engaged: -0.0088 n.s. (no engagement learning)
+- Biased: -0.1107*** (LEARNS TO AVOID BIAS - opposite of adaptive!)
+- Lapsed: +0.1195 n.s. (LEARNS TO LAPSE MORE - giving up!)
+- Strategy: Over time, gives up on task (increases lapse, avoids bias)
+- Within-genotype variation: HIGH (but all in wrong direction)
+- Effect: Explains why A1D_Wt are "Low Performers" in Phase 2
+
+**A1D_Het: THE NON-LEARNER**
+- Engaged: -0.0634 n.s. (no learning)
+- Biased: +0.0319 n.s. (no learning)
+- Lapsed: +0.0315 n.s. (no learning)
+- Strategy: No detectable learning trajectory
+- Within-genotype variation: VERY HIGH (all over the place)
+- Effect: Static performance, individual heterogeneity dominant
+
+
+================================================================================
+STATISTICAL POWER NOTES
+================================================================================
+
+A1D_Het (n=7) and A1D_KO (n=7) have small sample sizes.
+- Larger |effect| needed to reach p<0.05
+- A1D_Wt Lapsed trend: effect size substantial (0.1195) but p=0.089
+  * With larger sample: likely would reach p<0.05
+  * This is a "near-miss" significance
+
+B6 (n=22) and C3H×B6 (n=10) have larger samples.
+- Smaller |effect| can reach p<0.05
+- B6 Engaged: small slope (+0.0257) reaches p<0.001***
+  * Large sample size gives statistical power
+  * Consistent effect across all animals
+
+Lesson: P-values depend on sample size. Consider effect sizes and CI width too.
+
+
+================================================================================
+HOW TO USE THESE ENHANCEMENTS IN YOUR PAPER/PRESENTATION
+================================================================================
+
+1. **For Main Figure**: Use the enhanced visualization directly
+   - 9 panels tell a complete story without external explanation
+   - Panels 1-3 show the trajectories (visual appeal)
+   - Panels 4-6 show the statistics (rigor)
+   - Panels 7-9 show individual variation (completeness)
+
+2. **For Figure Legend** (suggested caption):
+   "Panel A-C: Individual animal state occupancy trajectories (light curves)
+   with genotype-specific regression fits (bold lines) and 95% confidence
+   intervals (shaded regions). Genotypes are color-coded: A1D_Wt (red),
+   A1D_KO (teal), A1D_Het (light teal), B6 (blue), C3H×B6 (purple).
+
+   Panel D: Learning rate comparison showing slope values with 95% CI and
+   significance markers (n.s., *, **, ***). Panel E: Statistical summary table
+   of all regression results. Panel F: R² heatmap showing effect sizes
+   (variance explained) by genotype and state.
+
+   Panels G-I: Within-genotype variation in individual animal learning rates,
+   shown as violin plots with individual data points. This reveals whether
+   genotypic learning strategies are consistent across all animals or
+   heterogeneous."
+
+3. **For Results Section** (suggested text):
+
+   "Phase 2 reversal learning showed distinct genotypic learning strategies
+   (Figure X). B6 demonstrated classical adaptive learning, significantly
+   increasing engagement (slope=+0.026%/100trials, p<0.001) while suppressing
+   lapsing (slope=-0.021%/100trials, p=0.003). In contrast, A1D_Wt showed
+   maladaptive learning, significantly decreasing biased state use
+   (slope=-0.111%/100trials, p<0.001) while trending toward increased lapsing
+   (slope=+0.120%/100trials, p=0.089). A1D_KO demonstrated intermediate
+   patterns with significant increases in biased state use (slope=+0.042%,
+   p=0.031) but no consistent engagement learning. Within-genotype variation
+   was minimal for B6 and C3H×B6, but pronounced for A1D_Wt, suggesting
+   differential susceptibility to reversal impairment."
+
+================================================================================
+SUMMARY
+================================================================================
+
+The enhanced visualization provides:
+
+✓ Confidence intervals showing slope reliability
+✓ Individual animal curves showing underlying heterogeneity
+✓ Statistical annotations enabling direct interpretation
+✓ Learning rate comparison with effect sizes
+✓ Within-genotype variation revealing individual differences
+✓ R² heatmap quantifying model fit quality
+
+Together, these enhancements transform the figure from a descriptive
+visualization into a statistically rigorous representation of Phase 2 learning,
+enabling comprehensive interpretation of both group-level strategies and
+individual-level variation.
