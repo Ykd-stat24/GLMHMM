@@ -45,8 +45,8 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Target mice
 TARGET_MICE = {
-    '82': {'cohort': 'F', 'label': 'Mouse 82 (Cohort F)'},
-    'c1m2': {'cohort': 'W', 'label': 'Mouse c1m2 (Cohort W)'}
+    '82': {'cohort': 'F', 'cohort_display': 'Cohort 1', 'label': 'Mouse 82 (Cohort 1)'},
+    'c1m2': {'cohort': 'W', 'cohort_display': 'Cohort 2', 'label': 'Mouse c1m2 (Cohort 2)'}
 }
 
 # State colors (matching Phase 1 style)
@@ -107,8 +107,8 @@ def compute_rolling_accuracy(correct_trials, window=50, min_periods=10):
 
 def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     """
-    Create Phase 2 learning curve with state occupancy.
-    Matches Phase 1 style exactly.
+    Create Phase 2 learning curve colored by state with info table.
+    NEW STYLE: Learning curve line colored by state + stats table.
 
     Args:
         animal_id: Animal identifier
@@ -122,6 +122,7 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     genotype = data.get('genotype', 'Unknown')
     state_metrics = data.get('state_metrics')
     broad_categories = data.get('broad_categories', {})
+    cohort_display = TARGET_MICE[animal_id]['cohort_display']
 
     if y is None or model is None:
         print(f"ERROR: Missing required data for {animal_id}")
@@ -136,91 +137,135 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
         print(f"ERROR: Model has no state sequence for {animal_id}")
         return
 
-    # Get state probabilities (for smooth visualization)
-    if hasattr(model, 'state_probabilities'):
-        state_probs = model.state_probabilities
-    else:
-        # Fallback: create one-hot encoding from most likely states
-        n_states = model.n_states
-        state_probs = np.zeros((n_trials, n_states))
-        for i, s in enumerate(states):
-            state_probs[i, s] = 1.0
-
-    # Extract state labels with accuracy information
-    state_labels = {}
+    # Extract state info
+    state_info = []
     for state in range(model.n_states):
         # Get broad category label
         category = 'Unknown'
         for key, value in broad_categories.items():
             if int(key) == state:
-                category = value[0]  # First element is the category
+                category = value[0]
                 break
 
         # Get accuracy for this state
         accuracy = np.nan
+        occupancy = 0.0
         if state_metrics is not None and isinstance(state_metrics, pd.DataFrame):
             state_row = state_metrics[state_metrics['state'] == state]
             if len(state_row) > 0:
                 accuracy = state_row['accuracy'].values[0]
+                occupancy = state_row['occupancy'].values[0]
 
-        # Create informative label
-        if not np.isnan(accuracy):
-            state_labels[state] = f"State {state}: {category}\n(Acc: {accuracy:.2f})"
-        else:
-            state_labels[state] = f"State {state}: {category}"
+        state_info.append({
+            'state': state,
+            'category': category,
+            'accuracy': accuracy,
+            'occupancy': occupancy
+        })
 
     # Compute rolling accuracy
     rolling_acc = compute_rolling_accuracy(y, window=50, min_periods=10)
 
-    # Create figure with 2 subplots (matching Phase 1 style)
-    fig, (ax1, ax2) = plt.subplots(
-        2, 1,
-        figsize=(14, 10),
-        sharex=True,
-        gridspec_kw={'height_ratios': [2, 1]}
-    )
+    # Create figure with gridspec for learning curve + table
+    fig = plt.figure(figsize=(16, 8))
+    gs = fig.add_gridspec(1, 3, width_ratios=[3, 0.1, 1], wspace=0.3)
+
+    ax_curve = fig.add_subplot(gs[0, 0])
+    ax_table = fig.add_subplot(gs[0, 2])
 
     trials = np.arange(n_trials)
 
     # ========================================
-    # Top Panel: Learning Curve
+    # Left Panel: Learning Curve Colored by State
     # ========================================
-    ax1.plot(trials, rolling_acc, linewidth=2, color='black', label='Accuracy')
-    ax1.axhline(0.5, color='gray', linestyle='--', alpha=0.5, label='Chance')
-    ax1.set_ylabel('Accuracy', fontsize=12)
-    ax1.set_ylim(0, 1.0)
-    ax1.set_title(
-        f'Phase 2 Learning Curve: {animal_id} - Cohort {cohort_letter}\n' +
+
+    # Plot learning curve with segments colored by state
+    for i in range(len(trials) - 1):
+        if not np.isnan(rolling_acc.iloc[i]) and not np.isnan(rolling_acc.iloc[i+1]):
+            current_state = states[i]
+            color = STATE_COLORS[current_state % len(STATE_COLORS)]
+            ax_curve.plot(
+                [trials[i], trials[i+1]],
+                [rolling_acc.iloc[i], rolling_acc.iloc[i+1]],
+                color=color,
+                linewidth=2.5,
+                alpha=0.8
+            )
+
+    # Add chance line
+    ax_curve.axhline(0.5, color='gray', linestyle='--', alpha=0.5, linewidth=1.5, label='Chance')
+
+    ax_curve.set_xlabel('Trial Number', fontsize=13, fontweight='bold')
+    ax_curve.set_ylabel('Accuracy (50-trial rolling avg)', fontsize=13, fontweight='bold')
+    ax_curve.set_ylim(0, 1.0)
+    ax_curve.set_title(
+        f'Phase 2 Learning Curve: {animal_id} ({cohort_display})\n' +
         f'Genotype: {genotype} | Reversal Learning',
-        fontsize=14,
-        fontweight='bold'
+        fontsize=15,
+        fontweight='bold',
+        pad=15
     )
-    ax1.legend(loc='lower right', framealpha=0.9)
-    ax1.grid(True, alpha=0.3)
+    ax_curve.grid(True, alpha=0.3)
+    ax_curve.legend(loc='best', framealpha=0.9)
 
     # ========================================
-    # Bottom Panel: State Occupancy
+    # Right Panel: State Info Table
     # ========================================
-    # Stack states from bottom to top
-    cumulative = np.zeros(n_trials)
+    ax_table.axis('off')
 
-    for state in range(model.n_states):
-        ax2.fill_between(
-            trials,
-            cumulative,
-            cumulative + state_probs[:, state],
-            color=STATE_COLORS[state % len(STATE_COLORS)],
-            alpha=0.7,
-            label=state_labels.get(state, f'State {state}'),
-            edgecolor='none'
-        )
-        cumulative += state_probs[:, state]
+    # Build table data
+    table_data = []
+    table_data.append(['State', 'Label', 'Occupancy', 'Accuracy'])
 
-    ax2.set_xlabel('Trial Number', fontsize=12)
-    ax2.set_ylabel('State Probability', fontsize=12)
-    ax2.set_ylim(0, 1.0)
-    ax2.legend(loc='upper right', framealpha=0.9, fontsize=9)
-    ax2.grid(True, alpha=0.3, axis='y')
+    for info in state_info:
+        state_num = info['state']
+        category = info['category']
+        occ = info['occupancy']
+        acc = info['accuracy']
+
+        occ_str = f"{occ*100:.1f}%" if not np.isnan(occ) else "N/A"
+        acc_str = f"{acc*100:.1f}%" if not np.isnan(acc) else "N/A"
+
+        table_data.append([
+            f"{state_num}",
+            category,
+            occ_str,
+            acc_str
+        ])
+
+    # Create table
+    table = ax_table.table(
+        cellText=table_data,
+        cellLoc='center',
+        loc='center',
+        colWidths=[0.15, 0.35, 0.25, 0.25]
+    )
+
+    table.auto_set_font_size(False)
+    table.set_fontsize(11)
+    table.scale(1, 2.5)
+
+    # Style header row
+    for i in range(4):
+        cell = table[(0, i)]
+        cell.set_facecolor('#40466e')
+        cell.set_text_props(weight='bold', color='white', fontsize=12)
+
+    # Style data rows with state colors
+    for row in range(1, len(table_data)):
+        state_idx = row - 1
+        color = STATE_COLORS[state_idx % len(STATE_COLORS)]
+
+        # State number cell gets the state color
+        table[(row, 0)].set_facecolor(color)
+        table[(row, 0)].set_text_props(weight='bold', fontsize=12)
+
+        # Other cells get light gray
+        for col in range(1, 4):
+            table[(row, col)].set_facecolor('#f0f0f0')
+            table[(row, col)].set_text_props(fontsize=11)
+
+    ax_table.set_title('State Statistics', fontsize=13, fontweight='bold', pad=20)
 
     # ========================================
     # Save Figure
@@ -247,6 +292,7 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
 def create_combined_comparison_figure(data_dict, save_dir):
     """
     Create a combined figure showing both mice side by side.
+    NEW STYLE: Each mouse has colored learning curve + info table.
 
     Args:
         data_dict: Dictionary with animal_id as keys, model data as values
@@ -258,11 +304,12 @@ def create_combined_comparison_figure(data_dict, save_dir):
         print("No data to create combined figure")
         return
 
-    fig = plt.figure(figsize=(18, 10))
-    gs = fig.add_gridspec(2, n_animals, hspace=0.3, wspace=0.3, height_ratios=[2, 1])
+    # New layout: each animal gets 2 columns (curve + table)
+    fig = plt.figure(figsize=(20, 8))
+    gs = fig.add_gridspec(1, n_animals * 3, wspace=0.5, width_ratios=[3, 0.1, 1.5] * n_animals)
 
-    for col, (animal_id, data) in enumerate(data_dict.items()):
-        cohort = TARGET_MICE[animal_id]['cohort']
+    for idx, (animal_id, data) in enumerate(data_dict.items()):
+        cohort_display = TARGET_MICE[animal_id]['cohort_display']
         genotype = data.get('genotype', 'Unknown')
         y = data.get('y')
         model = data.get('model')
@@ -275,87 +322,119 @@ def create_combined_comparison_figure(data_dict, save_dir):
         n_trials = len(y)
         trials = np.arange(n_trials)
 
-        # Get state sequence and probabilities
+        # Get state sequence
         if hasattr(model, 'most_likely_states'):
             states = model.most_likely_states
         else:
             continue
 
-        if hasattr(model, 'state_probabilities'):
-            state_probs = model.state_probabilities
-        else:
-            n_states = model.n_states
-            state_probs = np.zeros((n_trials, n_states))
-            for i, s in enumerate(states):
-                state_probs[i, s] = 1.0
-
-        # Extract state labels with accuracy information
-        state_labels = {}
+        # Extract state info
+        state_info = []
         for state in range(model.n_states):
-            # Get broad category label
             category = 'Unknown'
             for key, value in broad_categories.items():
                 if int(key) == state:
-                    category = value[0]  # First element is the category
+                    category = value[0]
                     break
 
-            # Get accuracy for this state
             accuracy = np.nan
+            occupancy = 0.0
             if state_metrics is not None and isinstance(state_metrics, pd.DataFrame):
                 state_row = state_metrics[state_metrics['state'] == state]
                 if len(state_row) > 0:
                     accuracy = state_row['accuracy'].values[0]
+                    occupancy = state_row['occupancy'].values[0]
 
-            # Create informative label
-            if not np.isnan(accuracy):
-                state_labels[state] = f"S{state}: {category}\n(Acc: {accuracy:.2f})"
-            else:
-                state_labels[state] = f"S{state}: {category}"
+            state_info.append({
+                'state': state,
+                'category': category,
+                'accuracy': accuracy,
+                'occupancy': occupancy
+            })
 
         # Compute rolling accuracy
         rolling_acc = compute_rolling_accuracy(y, window=50, min_periods=10)
 
-        # Top panel: Learning curve
-        ax1 = fig.add_subplot(gs[0, col])
-        ax1.plot(trials, rolling_acc, linewidth=2.5, color='black')
-        ax1.axhline(0.5, color='gray', linestyle='--', alpha=0.5, linewidth=1.5)
-        ax1.set_ylabel('Accuracy', fontsize=12, fontweight='bold')
-        ax1.set_ylim(0, 1.0)
-        ax1.set_title(
-            f'{animal_id} (Cohort {cohort})\n{genotype}',
+        # Calculate subplot positions
+        col_start = idx * 3
+
+        # Learning curve (colored by state)
+        ax_curve = fig.add_subplot(gs[0, col_start])
+
+        # Plot learning curve with segments colored by state
+        for i in range(len(trials) - 1):
+            if not np.isnan(rolling_acc.iloc[i]) and not np.isnan(rolling_acc.iloc[i+1]):
+                current_state = states[i]
+                color = STATE_COLORS[current_state % len(STATE_COLORS)]
+                ax_curve.plot(
+                    [trials[i], trials[i+1]],
+                    [rolling_acc.iloc[i], rolling_acc.iloc[i+1]],
+                    color=color,
+                    linewidth=2.5,
+                    alpha=0.8
+                )
+
+        ax_curve.axhline(0.5, color='gray', linestyle='--', alpha=0.5, linewidth=1.5)
+        ax_curve.set_ylabel('Accuracy', fontsize=12, fontweight='bold')
+        ax_curve.set_xlabel('Trial Number', fontsize=12, fontweight='bold')
+        ax_curve.set_ylim(0, 1.0)
+        ax_curve.set_title(
+            f'{animal_id} ({cohort_display})\n{genotype}',
             fontsize=13,
             fontweight='bold'
         )
-        ax1.grid(True, alpha=0.3)
+        ax_curve.grid(True, alpha=0.3)
 
-        # Bottom panel: State occupancy
-        ax2 = fig.add_subplot(gs[1, col])
-        cumulative = np.zeros(n_trials)
+        # Info table
+        ax_table = fig.add_subplot(gs[0, col_start + 2])
+        ax_table.axis('off')
 
-        for state in range(model.n_states):
-            ax2.fill_between(
-                trials,
-                cumulative,
-                cumulative + state_probs[:, state],
-                color=STATE_COLORS[state % len(STATE_COLORS)],
-                alpha=0.7,
-                label=state_labels.get(state, f'State {state}'),
-                edgecolor='none'
-            )
-            cumulative += state_probs[:, state]
+        # Build table
+        table_data = [['State', 'Label', 'Occ.', 'Acc.']]
+        for info in state_info:
+            state_num = info['state']
+            category = info['category']
+            occ = info['occupancy']
+            acc = info['accuracy']
 
-        ax2.set_xlabel('Trial Number', fontsize=12, fontweight='bold')
-        ax2.set_ylabel('State Probability', fontsize=12, fontweight='bold')
-        ax2.set_ylim(0, 1.0)
-        if col == n_animals - 1:  # Only show legend on rightmost plot
-            ax2.legend(loc='upper right', framealpha=0.9, fontsize=8)
-        ax2.grid(True, alpha=0.3, axis='y')
+            occ_str = f"{occ*100:.0f}%" if not np.isnan(occ) else "N/A"
+            acc_str = f"{acc*100:.0f}%" if not np.isnan(acc) else "N/A"
+
+            table_data.append([f"{state_num}", category, occ_str, acc_str])
+
+        table = ax_table.table(
+            cellText=table_data,
+            cellLoc='center',
+            loc='center',
+            colWidths=[0.12, 0.38, 0.22, 0.22]
+        )
+
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+        table.scale(1, 2.2)
+
+        # Style header
+        for i in range(4):
+            table[(0, i)].set_facecolor('#40466e')
+            table[(0, i)].set_text_props(weight='bold', color='white', fontsize=11)
+
+        # Style data rows
+        for row in range(1, len(table_data)):
+            state_idx = row - 1
+            color = STATE_COLORS[state_idx % len(STATE_COLORS)]
+            table[(row, 0)].set_facecolor(color)
+            table[(row, 0)].set_text_props(weight='bold', fontsize=11)
+            for col in range(1, 4):
+                table[(row, col)].set_facecolor('#f0f0f0')
+                table[(row, col)].set_text_props(fontsize=10)
+
+        ax_table.set_title('State Stats', fontsize=11, fontweight='bold', pad=10)
 
     fig.suptitle(
-        'Phase 2 Reversal Learning: Individual Sample Mice\nLearning Curves with State Occupancy',
+        'Phase 2 Reversal Learning: Individual Sample Mice',
         fontsize=16,
         fontweight='bold',
-        y=0.995
+        y=0.98
     )
 
     # Save combined figure
