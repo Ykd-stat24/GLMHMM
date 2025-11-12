@@ -1,0 +1,89 @@
+====================================================================================================
+PHASE 1 LAPSE FREQUENCY ANALYSIS - NON-PARAMETRIC STATISTICS
+====================================================================================================
+
+BACKGROUND:
+----------------------------------------------------------------------------------------------------
+Lapse Frequency = Percentage of trials in which animal was lapsed (disengaged)
+Data source: Pre-calculated lapse statistics from Phase 1 models
+Total animals: 54 across 5 genotypes
+
+RATIONALE FOR NON-PARAMETRIC TESTING:
+  • Small sample sizes per group (n=7-22) may violate normality assumptions
+  • Lapse frequency data may be skewed (many zeros in B6 group)
+  • Kruskal-Wallis H-test: robust alternative to one-way ANOVA
+  • Mann-Whitney U test: robust pairwise comparisons without normality
+
+====================================================================================================
+1. DESCRIPTIVE STATISTICS BY GENOTYPE (Lapse Frequency %)
+====================================================================================================
+
+Genotype  N      Mean    Median        SD  Min        Q1        Q3       Max       IQR
+ A1D_Het  7 13.801526 14.247312 10.627556  0.0  5.835544 23.025998 24.640288 17.190454
+  A1D_KO  7 18.820806 21.393035  8.967248  0.0 18.370998 23.948162 25.714286  5.577164
+  A1D_Wt  8  7.758104  6.415479  8.446816  0.0  0.000000 15.120968 18.750000 15.120968
+      B6 22  8.906593  0.000000 10.864480  0.0  0.000000 20.678653 27.450980 20.678653
+C3H x B6 10 11.229047 12.304329 11.205859  0.0  0.000000 18.910430 31.899642 18.910430
+
+====================================================================================================
+2. KRUSKAL-WALLIS H-TEST (OVERALL COMPARISON)
+====================================================================================================
+
+Test: Kruskal-Wallis H-test
+H-statistic: 6.2430
+Degrees of freedom: 4
+P-value: 0.181718
+
+✗ NOT SIGNIFICANT (p ≥ 0.05)
+  → No significant overall differences in lapse frequency among genotypes
+
+====================================================================================================
+3. POST-HOC PAIRWISE COMPARISONS (MANN-WHITNEY U TESTS)
+====================================================================================================
+
+Bonferroni-corrected α: 0.005000
+(Bonferroni correction applied for multiple comparisons)
+
+         Comparison  n1  n2  Median1  Median2  U_statistic  p_value Significant  Effect_size_r Effect_interpretation
+  A1D_Het vs A1D_KO   7   7    14.25    21.39         17.0 0.368980          No          0.256                 Small
+  A1D_Het vs A1D_Wt   7   8    14.25     6.42         37.0 0.309656          No          0.269                 Small
+      A1D_Het vs B6   7  22    14.25     0.00         98.0 0.267538          No          0.199                 Small
+A1D_Het vs C3H x B6   7  10    14.25    12.30         41.0 0.583252          No          0.142                 Small
+   A1D_KO vs A1D_Wt   7   8    21.39     6.42         49.0 0.015694          No          0.627                 Large
+       A1D_KO vs B6   7  22    21.39     0.00        110.0 0.082564          No          0.312                Medium
+ A1D_KO vs C3H x B6   7  10    21.39    12.30         54.0 0.067556          No          0.450                Medium
+       A1D_Wt vs B6   8  22     6.42     0.00         85.0 0.898730          No          0.026            Negligible
+ A1D_Wt vs C3H x B6   8  10     6.42    12.30         32.0 0.485614          No          0.168                 Small
+     B6 vs C3H x B6  22  10     0.00    12.30        100.0 0.679745          No          0.072            Negligible
+
+====================================================================================================
+4. EFFECT SIZE INTERPRETATION (Cohen's Guidelines for r)
+====================================================================================================
+
+r < 0.1      : Negligible effect
+0.1 ≤ r < 0.3: Small effect
+0.3 ≤ r < 0.5: Medium effect
+r ≥ 0.5      : Large effect
+
+====================================================================================================
+5. SUMMARY AND INTERPRETATION
+====================================================================================================
+
+No significant pairwise differences found after Bonferroni correction.
+
+====================================================================================================
+STATISTICAL METHODS REFERENCE:
+====================================================================================================
+
+Kruskal-Wallis H-test:
+  Non-parametric alternative to one-way ANOVA testing whether k independent
+  samples come from the same distribution. Null hypothesis: all groups have
+  identical distributions.
+
+Mann-Whitney U test:
+  Non-parametric test comparing two independent samples. Tests whether one
+  distribution is stochastically larger than the other.
+
+Effect size (r):
+  Standardized measure of difference magnitude independent of sample size.
+  Calculated as: r = |Z| / sqrt(N), where Z is standardized U statistic.
