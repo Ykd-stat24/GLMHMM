@@ -45,8 +45,8 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Target mice
 TARGET_MICE = {
-    '82': {'cohort': 'F', 'cohort_display': 'Cohort 1', 'label': 'Mouse 82 (Cohort 1)'},
-    'c1m2': {'cohort': 'W', 'cohort_display': 'Cohort 2', 'label': 'Mouse c1m2 (Cohort 2)'}
+    '82': {'cohort': 'F', 'cohort_display': 'Cohort 1', 'label': 'Mouse 82 (Cohort 1)', 'genotype_display': 'A1D_KO'},
+    'c1m2': {'cohort': 'W', 'cohort_display': 'Cohort 2', 'label': 'Mouse c1m2 (Cohort 2)', 'genotype_display': 'B6'}
 }
 
 # State colors (matching Phase 1 style)
@@ -119,7 +119,7 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     # Extract data
     y = data.get('y')  # Binary correct/incorrect
     model = data.get('model')
-    genotype = data.get('genotype', 'Unknown')
+    genotype = TARGET_MICE[animal_id]['genotype_display']  # Use display genotype
     state_metrics = data.get('state_metrics')
     broad_categories = data.get('broad_categories', {})
     cohort_display = TARGET_MICE[animal_id]['cohort_display']
@@ -167,8 +167,8 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     rolling_acc = compute_rolling_accuracy(y, window=50, min_periods=10)
 
     # Create figure with gridspec for learning curve + table
-    fig = plt.figure(figsize=(18, 8))
-    gs = fig.add_gridspec(1, 3, width_ratios=[3, 0.15, 1.2], wspace=0.4)
+    fig = plt.figure(figsize=(18, 9))
+    gs = fig.add_gridspec(1, 3, width_ratios=[2.5, 0.15, 1.5], wspace=0.4)
 
     ax_curve = fig.add_subplot(gs[0, 0])
     ax_table = fig.add_subplot(gs[0, 2])
@@ -251,7 +251,7 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
             acc_str
         ])
 
-    # Create table with better spacing
+    # Create table with better spacing - BIGGER SIZE
     table = ax_table.table(
         cellText=table_data,
         cellLoc='center',
@@ -260,15 +260,15 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     )
 
     table.auto_set_font_size(False)
-    table.set_fontsize(12)
-    table.scale(1, 3.0)  # Increased vertical spacing
+    table.set_fontsize(14)  # Increased from 12
+    table.scale(1.2, 3.5)  # Increased both horizontal and vertical scaling
 
     # Style header row
     for i in range(4):
         cell = table[(0, i)]
         cell.set_facecolor('#40466e')
-        cell.set_text_props(weight='bold', color='white', fontsize=13)
-        cell.set_height(0.12)
+        cell.set_text_props(weight='bold', color='white', fontsize=15)  # Increased
+        cell.set_height(0.15)  # Increased
 
     # Style data rows with state colors
     for row in range(1, len(table_data)):
@@ -277,16 +277,16 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
 
         # State number cell gets the state color
         table[(row, 0)].set_facecolor(color)
-        table[(row, 0)].set_text_props(weight='bold', fontsize=13)
-        table[(row, 0)].set_height(0.1)
+        table[(row, 0)].set_text_props(weight='bold', fontsize=15)  # Increased
+        table[(row, 0)].set_height(0.12)  # Increased
 
         # Other cells get light gray
         for col in range(1, 4):
             table[(row, col)].set_facecolor('#f0f0f0')
-            table[(row, col)].set_text_props(fontsize=12)
-            table[(row, col)].set_height(0.1)
+            table[(row, col)].set_text_props(fontsize=14)  # Increased
+            table[(row, col)].set_height(0.12)  # Increased
 
-    ax_table.set_title('State Statistics', fontsize=14, fontweight='bold', pad=25)
+    ax_table.set_title('State Statistics', fontsize=16, fontweight='bold', pad=30)
 
     # ========================================
     # Save Figure
@@ -326,12 +326,13 @@ def create_combined_comparison_figure(data_dict, save_dir):
         return
 
     # New layout: each animal gets 2 columns (curve + table)
-    fig = plt.figure(figsize=(22, 8))
-    gs = fig.add_gridspec(1, n_animals * 3, wspace=0.5, width_ratios=[3, 0.15, 1.3] * n_animals)
+    # Improved: Larger figure, better proportions
+    fig = plt.figure(figsize=(24, 10))
+    gs = fig.add_gridspec(1, n_animals * 3, wspace=0.6, width_ratios=[2.5, 0.2, 1.5] * n_animals)
 
     for idx, (animal_id, data) in enumerate(data_dict.items()):
         cohort_display = TARGET_MICE[animal_id]['cohort_display']
-        genotype = data.get('genotype', 'Unknown')
+        genotype = TARGET_MICE[animal_id]['genotype_display']  # Use display genotype
         y = data.get('y')
         model = data.get('model')
         state_metrics = data.get('state_metrics')
@@ -413,15 +414,17 @@ def create_combined_comparison_figure(data_dict, save_dir):
                 )
 
         ax_curve.axhline(0.5, color='gray', linestyle='--', alpha=0.5, linewidth=1.5)
-        ax_curve.set_ylabel('Accuracy', fontsize=12, fontweight='bold')
-        ax_curve.set_xlabel('Trial Number', fontsize=12, fontweight='bold')
+        ax_curve.set_ylabel('Accuracy', fontsize=14, fontweight='bold')
+        ax_curve.set_xlabel('Trial Number', fontsize=14, fontweight='bold')
         ax_curve.set_ylim(0, 1.0)
         ax_curve.set_title(
             f'{animal_id} ({cohort_display})\n{genotype}',
-            fontsize=13,
-            fontweight='bold'
+            fontsize=16,
+            fontweight='bold',
+            pad=15
         )
         ax_curve.grid(True, alpha=0.3)
+        ax_curve.tick_params(labelsize=12)
 
         # Info table
         ax_table = fig.add_subplot(gs[0, col_start + 2])
@@ -448,34 +451,34 @@ def create_combined_comparison_figure(data_dict, save_dir):
         )
 
         table.auto_set_font_size(False)
-        table.set_fontsize(11)
-        table.scale(1, 2.8)
+        table.set_fontsize(13)  # Increased
+        table.scale(1.15, 3.2)  # Increased scaling
 
         # Style header
         for i in range(4):
             table[(0, i)].set_facecolor('#40466e')
-            table[(0, i)].set_text_props(weight='bold', color='white', fontsize=12)
-            table[(0, i)].set_height(0.12)
+            table[(0, i)].set_text_props(weight='bold', color='white', fontsize=14)  # Increased
+            table[(0, i)].set_height(0.14)  # Increased
 
         # Style data rows
         for row in range(1, len(table_data)):
             state_idx = row - 1
             color = STATE_COLORS[state_idx % len(STATE_COLORS)]
             table[(row, 0)].set_facecolor(color)
-            table[(row, 0)].set_text_props(weight='bold', fontsize=12)
-            table[(row, 0)].set_height(0.1)
+            table[(row, 0)].set_text_props(weight='bold', fontsize=14)  # Increased
+            table[(row, 0)].set_height(0.11)  # Increased
             for col in range(1, 4):
                 table[(row, col)].set_facecolor('#f0f0f0')
-                table[(row, col)].set_text_props(fontsize=11)
-                table[(row, col)].set_height(0.1)
+                table[(row, col)].set_text_props(fontsize=13)  # Increased
+                table[(row, col)].set_height(0.11)  # Increased
 
-        ax_table.set_title('State Stats', fontsize=12, fontweight='bold', pad=15)
+        ax_table.set_title('State Statistics', fontsize=15, fontweight='bold', pad=20)  # Increased
 
     fig.suptitle(
         'Phase 2 Reversal Learning: Individual Sample Mice',
-        fontsize=16,
+        fontsize=18,
         fontweight='bold',
-        y=0.98
+        y=0.97
     )
 
     # Save combined figure
@@ -506,7 +509,7 @@ def generate_summary_statistics(data_dict, save_dir):
 
     for animal_id, data in data_dict.items():
         cohort = TARGET_MICE[animal_id]['cohort']
-        genotype = data.get('genotype', 'Unknown')
+        genotype = TARGET_MICE[animal_id]['genotype_display']  # Use display genotype
         y = data.get('y', [])
         model = data.get('model')
         state_metrics = data.get('state_metrics')
