@@ -120,6 +120,8 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     y = data.get('y')  # Binary correct/incorrect
     model = data.get('model')
     genotype = data.get('genotype', 'Unknown')
+    state_metrics = data.get('state_metrics')
+    broad_categories = data.get('broad_categories', {})
 
     if y is None or model is None:
         print(f"ERROR: Missing required data for {animal_id}")
@@ -143,6 +145,29 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
         state_probs = np.zeros((n_trials, n_states))
         for i, s in enumerate(states):
             state_probs[i, s] = 1.0
+
+    # Extract state labels with accuracy information
+    state_labels = {}
+    for state in range(model.n_states):
+        # Get broad category label
+        category = 'Unknown'
+        for key, value in broad_categories.items():
+            if int(key) == state:
+                category = value[0]  # First element is the category
+                break
+
+        # Get accuracy for this state
+        accuracy = np.nan
+        if state_metrics is not None and isinstance(state_metrics, pd.DataFrame):
+            state_row = state_metrics[state_metrics['state'] == state]
+            if len(state_row) > 0:
+                accuracy = state_row['accuracy'].values[0]
+
+        # Create informative label
+        if not np.isnan(accuracy):
+            state_labels[state] = f"State {state}: {category}\n(Acc: {accuracy:.2f})"
+        else:
+            state_labels[state] = f"State {state}: {category}"
 
     # Compute rolling accuracy
     rolling_acc = compute_rolling_accuracy(y, window=50, min_periods=10)
@@ -186,7 +211,7 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
             cumulative + state_probs[:, state],
             color=STATE_COLORS[state % len(STATE_COLORS)],
             alpha=0.7,
-            label=f'State {state}',
+            label=state_labels.get(state, f'State {state}'),
             edgecolor='none'
         )
         cumulative += state_probs[:, state]
@@ -194,7 +219,7 @@ def plot_phase2_learning_curve(animal_id, cohort_letter, data, save_dir):
     ax2.set_xlabel('Trial Number', fontsize=12)
     ax2.set_ylabel('State Probability', fontsize=12)
     ax2.set_ylim(0, 1.0)
-    ax2.legend(loc='upper right', framealpha=0.9)
+    ax2.legend(loc='upper right', framealpha=0.9, fontsize=9)
     ax2.grid(True, alpha=0.3, axis='y')
 
     # ========================================
@@ -241,6 +266,8 @@ def create_combined_comparison_figure(data_dict, save_dir):
         genotype = data.get('genotype', 'Unknown')
         y = data.get('y')
         model = data.get('model')
+        state_metrics = data.get('state_metrics')
+        broad_categories = data.get('broad_categories', {})
 
         if y is None or model is None:
             continue
@@ -261,6 +288,29 @@ def create_combined_comparison_figure(data_dict, save_dir):
             state_probs = np.zeros((n_trials, n_states))
             for i, s in enumerate(states):
                 state_probs[i, s] = 1.0
+
+        # Extract state labels with accuracy information
+        state_labels = {}
+        for state in range(model.n_states):
+            # Get broad category label
+            category = 'Unknown'
+            for key, value in broad_categories.items():
+                if int(key) == state:
+                    category = value[0]  # First element is the category
+                    break
+
+            # Get accuracy for this state
+            accuracy = np.nan
+            if state_metrics is not None and isinstance(state_metrics, pd.DataFrame):
+                state_row = state_metrics[state_metrics['state'] == state]
+                if len(state_row) > 0:
+                    accuracy = state_row['accuracy'].values[0]
+
+            # Create informative label
+            if not np.isnan(accuracy):
+                state_labels[state] = f"S{state}: {category}\n(Acc: {accuracy:.2f})"
+            else:
+                state_labels[state] = f"S{state}: {category}"
 
         # Compute rolling accuracy
         rolling_acc = compute_rolling_accuracy(y, window=50, min_periods=10)
@@ -289,7 +339,7 @@ def create_combined_comparison_figure(data_dict, save_dir):
                 cumulative + state_probs[:, state],
                 color=STATE_COLORS[state % len(STATE_COLORS)],
                 alpha=0.7,
-                label=f'State {state}',
+                label=state_labels.get(state, f'State {state}'),
                 edgecolor='none'
             )
             cumulative += state_probs[:, state]
@@ -298,7 +348,7 @@ def create_combined_comparison_figure(data_dict, save_dir):
         ax2.set_ylabel('State Probability', fontsize=12, fontweight='bold')
         ax2.set_ylim(0, 1.0)
         if col == n_animals - 1:  # Only show legend on rightmost plot
-            ax2.legend(loc='upper right', framealpha=0.9)
+            ax2.legend(loc='upper right', framealpha=0.9, fontsize=8)
         ax2.grid(True, alpha=0.3, axis='y')
 
     fig.suptitle(
@@ -339,6 +389,8 @@ def generate_summary_statistics(data_dict, save_dir):
         genotype = data.get('genotype', 'Unknown')
         y = data.get('y', [])
         model = data.get('model')
+        state_metrics = data.get('state_metrics')
+        broad_categories = data.get('broad_categories', {})
 
         if len(y) == 0 or model is None:
             continue
@@ -346,13 +398,36 @@ def generate_summary_statistics(data_dict, save_dir):
         # Overall accuracy
         overall_acc = np.mean(y)
 
-        # State occupancy
+        # State occupancy and characterization
+        state_info = {}
         if hasattr(model, 'most_likely_states'):
             states = model.most_likely_states
             state_counts = np.bincount(states, minlength=model.n_states)
             state_occupancy = state_counts / len(states)
+
+            for state in range(model.n_states):
+                # Get category
+                category = 'Unknown'
+                for key, value in broad_categories.items():
+                    if int(key) == state:
+                        category = value[0]
+                        break
+
+                # Get accuracy
+                state_acc = np.nan
+                if state_metrics is not None and isinstance(state_metrics, pd.DataFrame):
+                    state_row = state_metrics[state_metrics['state'] == state]
+                    if len(state_row) > 0:
+                        state_acc = state_row['accuracy'].values[0]
+
+                state_info[f'State_{state}_Label'] = category
+                state_info[f'State_{state}_Occupancy'] = state_occupancy[state]
+                state_info[f'State_{state}_Accuracy'] = state_acc
         else:
-            state_occupancy = [np.nan] * model.n_states
+            for state in range(3):
+                state_info[f'State_{state}_Label'] = 'Unknown'
+                state_info[f'State_{state}_Occupancy'] = np.nan
+                state_info[f'State_{state}_Accuracy'] = np.nan
 
         # Early vs late performance
         n_trials = len(y)
@@ -362,7 +437,7 @@ def generate_summary_statistics(data_dict, save_dir):
         early_acc = np.mean(y[:early_trials])
         late_acc = np.mean(y[-early_trials:])
 
-        summary_data.append({
+        row_data = {
             'Animal_ID': animal_id,
             'Cohort': cohort,
             'Genotype': genotype,
@@ -371,10 +446,9 @@ def generate_summary_statistics(data_dict, save_dir):
             'Early_Accuracy': early_acc,
             'Late_Accuracy': late_acc,
             'Accuracy_Change': late_acc - early_acc,
-            'State_0_Occupancy': state_occupancy[0],
-            'State_1_Occupancy': state_occupancy[1],
-            'State_2_Occupancy': state_occupancy[2] if len(state_occupancy) > 2 else np.nan
-        })
+        }
+        row_data.update(state_info)
+        summary_data.append(row_data)
 
     # Create DataFrame
     summary_df = pd.DataFrame(summary_data)

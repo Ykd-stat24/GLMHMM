@@ -1,3 +1,3 @@
-Animal_ID,Cohort,Genotype,Total_Trials,Overall_Accuracy,Early_Accuracy,Late_Accuracy,Accuracy_Change,State_0_Occupancy,State_1_Occupancy,State_2_Occupancy
-82,F,-/-,150,0.5533,0.2432,0.8649,0.6216,0.9733,0.0133,0.0133
-c1m2,W,+,507,0.3373,0.1825,0.3651,0.1825,0.8304,0.1637,0.0059
+Animal_ID,Cohort,Genotype,Total_Trials,Overall_Accuracy,Early_Accuracy,Late_Accuracy,Accuracy_Change,State_0_Label,State_0_Occupancy,State_0_Accuracy,State_1_Label,State_1_Occupancy,State_1_Accuracy,State_2_Label,State_2_Occupancy,State_2_Accuracy
+82,F,-/-,150,0.5533,0.2432,0.8649,0.6216,Mixed,0.9733,0.5616,Lapsed,0.0133,0.0000,Mixed,0.0133,0.5000
+c1m2,W,+,507,0.3373,0.1825,0.3651,0.1825,Mixed,0.8304,0.5083,Lapsed,0.1637,0.4337,Mixed,0.0059,0.3333
