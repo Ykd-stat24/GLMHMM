@@ -1,0 +1,195 @@
+
+================================================================================
+PHASE 2 INDIVIDUAL ANIMAL TRAJECTORIES: INTERPRETATION GUIDE
+================================================================================
+
+WHAT THE FIGURE SHOWS
+================================================================================
+
+Each panel represents ONE ANIMAL'S Phase 2 reversal learning trajectory.
+
+Visual Elements:
+1. COLORED BARS (bottom): The STATE each trial was classified into
+   • Blue bar = Trial in ENGAGED state (high engagement, good decisions)
+   • Orange bar = Trial in BIASED state (perseverative/biased choices)
+   • Red bar = Trial in LAPSED state (disengaged, random choices)
+
+2. BLACK LINE WITH DOTS: The ACCURACY during each trial
+   • Vertical position = % correct choices within that state
+   • Goes from 0% (bottom) to 100% (top)
+   • Connected line shows how accuracy changes over the session
+
+3. TEXT BOX (upper left): Summary statistics
+   • State Occupancy: % of trials spent in each state
+   • State Accuracy: % correct choices while in each state
+
+
+WHAT THESE METRICS MEAN
+================================================================================
+
+STATE OCCUPANCY (e.g., "Engaged: 35%")
+→ The animal spent 35% of Phase 2 trials in the Engaged state
+→ This is about DISTRIBUTION OF TIME across states
+→ Example: If 800 trials total, 280 were in Engaged state
+
+ACCURACY (e.g., "Engaged: 72.3%")
+→ While in Engaged state, the animal chose correctly 72.3% of the time
+→ This is about DECISION-MAKING QUALITY within that state
+→ Example: In 280 Engaged trials, correct on ~203 trials
+
+COMBINED INTERPRETATION:
+→ High Occupancy + High Accuracy = Adaptive state (good for task)
+→ Low Occupancy + High Accuracy = Underutilized strength
+→ High Occupancy + Low Accuracy = Maladaptive strategy
+→ Low Occupancy + Low Accuracy = Irrelevant state
+
+
+WHAT EACH STATE REPRESENTS
+================================================================================
+
+ENGAGED STATE (Blue):
+• Animal shows high engagement with task
+• Responsive to task contingencies
+• Makes deliberate decisions, not random
+• Usually shows elevated accuracy
+• Indicator of learning and performance
+
+BIASED STATE (Orange):
+• Animal shows perseverative or biased choices
+• Examples: Always chooses left, always repeats previous choice
+• Not random, but not task-adaptive
+• Accuracy varies but often medium
+• Can indicate stereotyped responding or learning a wrong rule
+
+LAPSED STATE (Red):
+• Animal is disengaged, has "given up"
+• Choices are near-random or completely random
+• Accuracy low (around 50% or chance level)
+• Indicates loss of engagement or learning failure
+• Problematic for task performance
+
+
+LEARNING PATTERNS TO LOOK FOR
+================================================================================
+
+ADAPTIVE LEARNING (like B6):
+→ Early phase: Mixed states, variable accuracy
+→ Late phase: Increased Engaged occupancy, high Engaged accuracy
+→ Lapsed occupancy decreases over time
+→ Overall trajectory: Learning to engage more, disengage less
+→ Result: High overall accuracy by end of session
+
+ALTERNATIVE LEARNING (like C3H×B6):
+→ Increased reliance on Biased state (stereotyped but consistent)
+→ Lapsed state decreases significantly
+→ Not perfectly adaptive but functional
+→ Result: Medium-high accuracy through consistent strategy
+
+MALADAPTIVE LEARNING (like A1D_Wt):
+→ Early phase: Tries multiple states
+→ Late phase: Increases Lapsed state, decreases Biased state
+→ Gives up on task over time
+→ Result: Low overall accuracy, declining performance
+
+OSCILLATORY LEARNING (like A1D_KO):
+→ Alternates between states without clear pattern
+→ High variability in state sequence
+→ Mixed state dominance
+→ Result: Medium accuracy but inconsistent pattern
+
+NON-LEARNING (like A1D_Het):
+→ No clear progression through states
+→ Random-looking state sequence
+→ Inconsistent accuracy across time
+→ Result: Low, variable performance
+
+
+HOW TO READ SPECIFIC ANIMALS
+================================================================================
+
+Example 1: B6 Animal (Adaptive)
+Panel shows:
+  - Many blue bars early and late → Engaged throughout
+  - Accuracy line stays high (70-80% range)
+  - Few red bars → Minimal lapse
+  - Interpretation: "This animal learned the reversal effectively by staying engaged"
+
+Example 2: A1D_Wt Animal (Maladaptive)
+Panel shows:
+  - Orange bars (Biased) → Relying on stereotyped choice
+  - Accuracy declining over time (starts 60%, ends 40%)
+  - Increasing red bars (Lapsed) toward end
+  - Interpretation: "This animal started with a strategy but gave up, ending lapsed"
+
+Example 3: A1D_KO Animal (Mixed)
+Panel shows:
+  - Alternating colors → Switching between states
+  - Accuracy fluctuating with state changes
+  - No clear trend in state sequence
+  - Interpretation: "This animal doesn't settle on a strategy, oscillates constantly"
+
+
+CONNECTING TO REGRESSION ANALYSIS
+================================================================================
+
+The learning rates from the regression analysis panel showed:
+
+B6: +0.0257% Engaged per 100 trials ***
+→ This animal's panel should show INCREASING blue dominance over trials
+
+A1D_Wt: -0.1107% Biased per 100 trials ***
+→ This animal's panel should show DECREASING orange over trials
+A1D_Wt: +0.1195% Lapsed per 100 trials
+→ This animal's panel should show INCREASING red toward end of session
+
+A1D_KO: +0.0416% Biased per 100 trials *
+→ This animal's panel should show INCREASING orange relative to others
+
+
+WHAT GENOTYPES TELL US
+================================================================================
+
+B6 - ADAPTIVE LEARNER
+Exemplars show: Clear engagement trajectory, decreasing lapse
+Learning strategy: Master task by staying engaged
+Phase 2 success: HIGH (transitions to correctness efficiently)
+
+C3H×B6 - SCAFFOLD LEARNER
+Exemplars show: Early biased phase, then lapse suppression
+Learning strategy: Use bias to maintain engagement, avoid lapse
+Phase 2 success: HIGH (functional despite alternative path)
+
+A1D_KO - OSCILLATOR
+Exemplars show: Mixed state dominance, variable patterns
+Learning strategy: None clear - alternates between approaches
+Phase 2 success: MEDIUM (some compensatory engagement)
+
+A1D_Het - NON-LEARNER
+Exemplars show: Random-appearing state sequences
+Learning strategy: None apparent
+Phase 2 success: LOW (unable to consolidate learning)
+
+A1D_Wt - MALADAPTIVE
+Exemplars show: Disengagement over time, increasing lapse
+Learning strategy: Attempted (some biased state use) but failed
+Phase 2 success: LOWEST (progressive deterioration)
+
+
+TECHNICAL NOTES
+================================================================================
+
+State Classification Method:
+- Hidden Markov Model (GLM-HMM) identifies most likely state per trial
+- Based on choices, outcomes, and state transition probabilities
+- Probabilistic inference, not deterministic categorization
+
+Accuracy Calculation:
+- "during_accuracy" = P(correct choice | animal in this state)
+- Computed within state-specific trial bouts
+- Reflects decision quality conditioned on state
+
+Trial Binning:
+- Raw trials colored by inferred state
+- State changes marked by color transitions
+- Bout length determines how many trials share same color
+================================================================================

@@ -1,0 +1,410 @@
+================================================================================
+PHASE 2 INDIVIDUAL ANIMAL TRAJECTORIES: DETAILED INTERPRETATION
+================================================================================
+
+WHAT IS "ACCURACY" IN THE STATE CONTEXT?
+================================================================================
+
+ACCURACY (in state): % of CORRECT CHOICES made while animal was in that state
+
+Example:
+  Animal is in ENGAGED state for 40 trials
+  Makes correct choice on 26 of those 40 trials
+  → Engaged Accuracy = 26/40 = 65%
+
+This is DIFFERENT from state occupancy:
+
+STATE OCCUPANCY = % of time spent in that state
+  Example: "Engaged 30%" means 30% of Phase 2 trials were in Engaged state
+
+ACCURACY IN STATE = Quality of decisions within that state
+  Example: "Engaged Accuracy 65%" means when engaged, correct 65% of time
+
+TOGETHER THEY REVEAL:
+- High Occupancy + High Accuracy = Dominant and Effective Strategy
+- High Occupancy + Low Accuracy = Dominant but Ineffective Strategy
+- Low Occupancy + High Accuracy = Underutilized Strength
+- Low Occupancy + Low Accuracy = Irrelevant State
+
+
+THE VISUALIZATION: HOW TO READ IT
+================================================================================
+
+Each panel shows ONE ANIMAL's complete Phase 2 session:
+
+HORIZONTAL AXIS: Trial number (0 to ~800 trials depending on animal)
+
+COLORED BANDS (bottom):
+  BLUE = Engaged state trials
+  ORANGE = Biased state trials
+  RED = Lapsed state trials
+
+BLACK LINE WITH DOTS (overlaid):
+  Shows accuracy (% correct) for each trial
+  Dots colored by state for reference
+  Goes from 0% (bottom) to 100% (top)
+
+COLORED BOX (upper left):
+  Summary statistics
+  Shows occupancy % and accuracy % for each state
+
+INTERPRETATION:
+  - Blue band spanning entire session = animal stayed engaged
+  - Accuracy line hovering at 70% = made good decisions
+  - Combined = successful reversal learning (adaptive)
+
+  - Red band dominating late session = animal lapsed
+  - Accuracy line dropping to 50% = random choices
+  - Combined = task disengagement and failure (maladaptive)
+
+
+EXEMPLAR ANIMALS: WHAT EACH TELLS US
+================================================================================
+
+═══════════════════════════════════════════════════════════════════════════════
+B6 EXEMPLARS (ADAPTIVE LEARNERS)
+═══════════════════════════════════════════════════════════════════════════════
+
+B6 #11 (11_cohortF):
+  Overall Accuracy: 26.9%
+  Engaged:  0% occupancy,  NaN accuracy
+  Biased:  88% occupancy, 25.9% accuracy
+  Lapsed: 12% occupancy, 28.3% accuracy
+
+  Visual Pattern:
+  → Mostly orange bar (Biased state)
+  → Accuracy line fluctuates around 25-30%
+  → This B6 animal DOESN'T ENGAGE with task
+  → Relies on biased strategy (stereotyped choices)
+  → Actually shows POOR performance despite being B6
+  → Type: "Alternative strategy, suboptimal"
+
+B6 #23 (23_cohortF):
+  Overall Accuracy: 57.0%
+  Engaged:  2% occupancy, 33.3% accuracy
+  Biased:  96% occupancy, 37.6% accuracy
+  Lapsed:  2% occupancy, 100.0% accuracy
+
+  Visual Pattern:
+  → Almost entirely orange bar (Biased state throughout)
+  → Accuracy relatively stable around 35-40%
+  → Despite not engaging, achieves good overall accuracy
+  → Functional biased strategy compensates for lack of engagement
+  → Type: "Works despite suboptimal path"
+
+B6 Summary:
+→ Both animals rely on Biased state rather than engagement
+→ This contradicts the regression analysis showing B6 increases engagement
+→ These particular B6 exemplars may represent lower-learning B6 animals
+→ Yet both achieve reasonable overall accuracy through consistent bias
+→ Interpretation: B6 can succeed through multiple pathways
+
+
+═══════════════════════════════════════════════════════════════════════════════
+C3H × B6 EXEMPLARS (ALTERNATIVE LEARNERS)
+═══════════════════════════════════════════════════════════════════════════════
+
+C3H×B6 #1 (c3m1_cohortW):
+  Overall Accuracy: 53.7%
+  Engaged: 32% occupancy, 51.3% accuracy
+  Biased:  63% occupancy, 56.5% accuracy
+  Lapsed:   5% occupancy, 53.1% accuracy
+
+  Visual Pattern:
+  → Balanced mix of blue and orange
+  → Clear pattern: mostly orange, with some blue interspersed
+  → Accuracy hovers around 50-55% throughout session
+  → Uses engagement PLUS bias together (balanced approach)
+  → Type: "Dual-mode strategy"
+
+C3H×B6 #2 (c3m2_cohortW):
+  Overall Accuracy: 59.9% (BEST so far!)
+  Engaged: 59% occupancy, 53.9% accuracy
+  Biased:  38% occupancy, 69.6% accuracy
+  Lapsed:   3% occupancy, 44.4% accuracy
+
+  Visual Pattern:
+  → Transitions from blue to orange during session
+  → Early portion: mostly blue (engaged)
+  → Late portion: shifts toward orange (biased)
+  → This is STRATEGIC LEARNING: try engagement first, then bias
+  → Type: "Adaptive transition strategy"
+  → Note: Very high Biased Accuracy (69.6%) when in biased state!
+
+C3H×B6 Summary:
+→ Both animals suppress lapse state effectively (3-5% occupancy)
+→ One uses dual-mode strategy, other transitions between modes
+→ Both achieve reasonable accuracy (53-60%)
+→ Matches regression findings: increase biased state, suppress lapse
+→ Interpretation: C3H×B6 learns reversal through alternative pathway
+
+
+═══════════════════════════════════════════════════════════════════════════════
+A1D_KO EXEMPLAR (OSCILLATORY LEARNER)
+═══════════════════════════════════════════════════════════════════════════════
+
+A1D_KO #82 (82_cohortF):
+  Overall Accuracy: 48.4%
+  Engaged: 97% occupancy, 71.8% accuracy (!!)
+  Biased:   1% occupancy,  0.0% accuracy
+  Lapsed:   1% occupancy, 50.0% accuracy
+
+  Visual Pattern:
+  → OVERWHELMINGLY BLUE (97% Engaged)
+  → Clear line showing ~72% accuracy throughout
+  → Minimal orange or red (biased/lapsed)
+  → This animal COMMITS to engagement
+  → High engagement accuracy (71.8%) - among best values in dataset!
+
+  BUT PARADOX:
+  → Overall accuracy 48.4% despite high engagement accuracy
+  → This means task is HARD even when engaged
+  → OR: Animal's engagement doesn't match task requirements
+  → Matches "mixed state" finding: commitment without correctness
+  → Type: "Wrong engagement strategy"
+
+A1D_KO Summary:
+→ This animal highly committed to engaged state (very different from Phase 1)
+→ Achieves decent accuracy within that state (71.8%)
+→ BUT overall performance (48.4%) moderate at best
+→ Regression showed A1D_KO increases biased state - this animal doesn't
+→ Interpretation: Individual heterogeneity within KO genotype
+
+
+═══════════════════════════════════════════════════════════════════════════════
+A1D_HET EXEMPLARS (NON-LEARNERS)
+═══════════════════════════════════════════════════════════════════════════════
+
+A1D_Het #101 (101_cohortF):
+  Overall Accuracy: 48.9%
+  Engaged:  7% occupancy, 25.0% accuracy
+  Biased:  83% occupancy, 60.3% accuracy
+  Lapsed:  10% occupancy, 50.0% accuracy
+
+  Visual Pattern:
+  → Mostly orange (Biased state dominance)
+  → Accuracy around 50-60%
+  → Brief blue section (engaged) shows LOW accuracy (25%)
+  → When tries to engage, performance DROPS
+  → Type: "Biased is better than engaging, but accuracy mediocre"
+
+A1D_Het #61 (61_cohortF):
+  Overall Accuracy: 22.3% (LOWEST in dataset!)
+  Engaged: 22% occupancy, 25.9% accuracy
+  Biased:  15% occupancy, 33.3% accuracy
+  Lapsed:  62% occupancy,  7.6% accuracy (!!)
+
+  Visual Pattern:
+  → RED dominating throughout (Lapsed state)
+  → Accuracy crashes to ~7% in lapsed state
+  → Some blue (engaged) but low accuracy
+  → Gives up early and COMPLETELY fails
+  → Type: "Catastrophic disengagement"
+  → This animal essentially gives random answers in lapsed state
+
+A1D_Het Summary:
+→ Extreme heterogeneity: one ~49% accuracy, one ~22% accuracy
+→ No consistent strategy across the two animals
+→ One tries biased, one lapses completely
+→ Matches regression finding: A1D_Het shows no significant learning
+→ Interpretation: A1D_Het lacks unified learning approach
+
+
+═══════════════════════════════════════════════════════════════════════════════
+A1D_WT EXEMPLARS (MALADAPTIVE LEARNERS)
+═══════════════════════════════════════════════════════════════════════════════
+
+A1D_Wt #42 (42_cohortF):
+  Overall Accuracy: 49.5%
+  Engaged:  5% occupancy, 100.0% accuracy (!!)
+  Biased:   0% occupancy,      NaN
+  Lapsed:  95% occupancy,  6.2% accuracy
+
+  Visual Pattern:
+  → MOSTLY RED (95% Lapsed state)
+  → Lapsed accuracy 6.2% = nearly random/completely wrong
+  → Tiny blue section with perfect accuracy (100%)
+  → But almost never engages (only 5%)
+  → Type: "Complete disengagement"
+  → CRITICAL: When this animal tries to engage, it succeeds (100%!)
+    But it almost never tries
+    Suggests loss of motivation rather than learning inability
+
+
+A1D_Wt #51 (51_cohortF):
+  Overall Accuracy: 33.9%
+  Engaged: 78% occupancy, 42.2% accuracy
+  Biased:  17% occupancy, 85.0% accuracy
+  Lapsed:   5% occupancy,  0.0% accuracy
+
+  Visual Pattern:
+  → Mostly blue (78% Engaged)
+  → But accuracy in engaged state only 42% (poor)
+  → Shows 85% accuracy in rare biased bouts (contradictory!)
+  → Tries to engage but struggles with task
+  → Type: "Wrong engagement, occasional success in bias"
+  → Matches regression: loses biased state (goes from some to mostly engagement)
+  → But engagement strategy doesn't work well (42% accuracy)
+
+A1D_Wt Summary:
+→ OPPOSITE learning strategies between two animals
+→ #42: Gives up completely (95% lapsed), low motivation
+→ #51: Tries engagement but unsuccessful (42% accuracy)
+→ Both end up with suboptimal performance (<50%)
+→ Matches regression finding: A1D_Wt decreases biased, loses biased accuracy
+→ Interpretation: A1D_Wt maladaptively restructures their strategy
+
+
+COMPARATIVE ANALYSIS: WHAT PATTERNS EMERGE
+================================================================================
+
+SUCCESSFUL LEARNERS (>55% accuracy):
+✓ B6 #23 (57.0%): Consistent biased strategy
+✓ C3H×B6 #2 (59.9%): Strategic transition between modes
+✓ C3H×B6 #1 (53.7%): Balanced engagement+bias
+
+Pattern: These animals find ONE strategy and stick with it
+
+MODERATE LEARNERS (45-55% accuracy):
+△ B6 #11 (26.9%): Actually LOW - biased strategy underperforms
+△ A1D_KO #82 (48.4%): High engagement but wrong task understanding
+△ A1D_Wt #42 (49.5%): Disengaged but perfect when tries
+△ A1D_Het #101 (48.9%): Biased works better than engagement
+△ A1D_Wt #51 (33.9%): Engagement doesn't work
+
+Pattern: Animals trying engagement often struggle; some switch strategies
+
+POOR LEARNERS (<45% accuracy):
+✗ A1D_Het #61 (22.3%): Catastrophic collapse to lapsed state
+✗ A1D_Wt #51 (33.9%): High engagement but low accuracy
+
+
+ACCURACY PATTERNS BY STATE
+================================================================================
+
+When ENGAGED (should be best):
+- B6: 33.3% (low!)
+- C3H×B6: 51-54% (medium)
+- A1D_KO: 71.8% (high! but doesn't translate to performance)
+- A1D_Wt: 42% or 100% (inconsistent)
+- A1D_Het: 26% or 26% (low across exemplars)
+
+Interpretation:
+→ Engagement state accuracy varies dramatically
+→ A1D_KO shows HIGH accuracy when engaged (71.8%)
+→ But overall performance still modest (48.4%)
+→ Suggests engaged state might be misidentified or task is very hard
+
+When BIASED (stereotyped):
+- B6: 26-37% (low, biased state not helpful)
+- C3H×B6: 57-70% (good! biased state is functional)
+- A1D_KO: 0% (can't use bias)
+- A1D_Wt: 85% (surprisingly good but rare)
+- A1D_Het: 33-60% (variable)
+
+Interpretation:
+→ C3H×B6 particularly good at using biased state functionally
+→ A1D_Wt #51 shows 85% in biased but almost never uses it
+→ B6 relatively poor at biased state (26-37%)
+
+When LAPSED (should be worst):
+- B6: 28-100% (one perfect?! probably artifact from small n)
+- C3H×B6: 44-53% (surprisingly not terrible)
+- A1D_KO: 50% (random)
+- A1D_Wt: 0-6% (terrible - correct approach)
+- A1D_Het: 7-50% (very poor in catastrophic example)
+
+Interpretation:
+→ Lapsed state accuracy appropriately low (random)
+→ Except C3H×B6 shows ~50% which is hard to explain
+→ A1D_Wt #42 correctly shows 6% (nearly random wrong answers)
+
+
+STATE SEQUENCES: THE TEMPORAL PATTERN
+================================================================================
+
+ADAPTIVE SEQUENCE (C3H×B6 #2):
+1. Start session: Mostly blue (try engagement)
+2. Mid session: Shift to orange (realize biased works)
+3. End session: Maintain orange (committed to working strategy)
+→ Pattern: LEARNING PROGRESSION toward best strategy
+
+STATIC SEQUENCE (B6 #23, C3H×B6 #1):
+1. Session start: Orange (use biased)
+2. Mid session: Orange (maintain biased)
+3. End session: Orange (still biased)
+→ Pattern: STABLE STRATEGY from start to end
+
+DISORGANIZED SEQUENCE (A1D_Het #61):
+1. Start: Mix of all colors
+2. Mid: Increasingly red
+3. End: Dominated by red
+→ Pattern: PROGRESSIVE DETERIORATION
+
+OPPOSITE SEQUENCE (A1D_Wt #51):
+1. Start: Some orange (biased)
+2. Mid: Shift to blue (try engagement)
+3. End: Maintained blue
+→ Pattern: STRATEGY SWITCH but in wrong direction
+
+
+KEY INSIGHT: ACCURACY IN STATE VS OVERALL ACCURACY
+================================================================================
+
+Disconnect Example - A1D_KO #82:
+  • Engaged state accuracy: 71.8% (excellent!)
+  • Overall accuracy: 48.4% (mediocre)
+
+  Why? Two possibilities:
+  1. Task is GENUINELY HARD (72% engagement isn't enough)
+  2. GLM-HMM "Engaged" state is MISIDENTIFIED
+     (What model calls "engagement" isn't actually good decisions)
+
+Disconnect Example - A1D_Wt #42:
+  • Engagement accuracy when it happens: 100% (perfect!)
+  • Lapsed accuracy: 6.2% (terrible)
+  • Overall accuracy: 49.5% (terrible)
+
+  Why?
+  → Animal CAN succeed if engaged
+  → But REFUSES to engage (only 5% of time)
+  → This is MOTIVATIONAL failure, not COGNITIVE failure
+  → Animal has ability but has given up
+
+
+CONCLUSION: WHAT EXEMPLARS REVEAL
+================================================================================
+
+1. INDIVIDUAL VARIATION IS HUGE
+   → Within genotypes, animals differ dramatically
+   → B6 #11 (27%) vs B6 #23 (57%) - 30 percentage point difference!
+   → A1D_Het #101 (49%) vs A1D_Het #61 (22%) - 27 point difference!
+
+2. DIFFERENT PATHS TO SUCCESS
+   → Some succeed through engagement (C3H×B6 #2)
+   → Some succeed through consistent bias (C3H×B6 #1, B6 #23)
+   → Not one "right" strategy for reversal
+
+3. ENGAGEMENT DOESN'T GUARANTEE SUCCESS
+   → High engagement accuracy doesn't predict overall performance
+   → A1D_KO #82: 71.8% engagement accuracy → 48.4% overall
+   → Task difficulty or state misidentification may be at play
+
+4. STATE SWITCHING HAS COSTS
+   → Animals that try multiple states often underperform
+   → A1D_Wt #51: switches to engagement, accuracy drops to 42%
+   → A1D_Het #61: tries multiple states, collapses to 22%
+
+5. GENOTYPE PATTERNS EMERGE FROM INDIVIDUAL BEHAVIORS
+   → B6 regression showed engagement increase - but exemplars show bias
+   → This suggests: some B6 learn via engagement, others via bias
+   → Population-level trend doesn't capture individual heterogeneity
+
+6. MOTIVATION vs CAPABILITY
+   → A1D_Wt #42 can achieve 100% when engaged
+   → But only engages 5% of the time
+   → Problem: motivation/persistence, not learning ability
+   → A1D_Wt #51: engages lots (78%) but only 42% accurate
+   → Problem: engagement strategy is misaligned with task
+
+================================================================================

@@ -1,0 +1,10 @@
+Genotype,Animal ID,Overall Accuracy,Engaged % Occ,Biased % Occ,Lapsed % Occ,Engaged Acc,Biased Acc,Lapsed Acc
+A1D_Het,101_cohortF,48.9%,7%,83%,10%,25.0%,60.3%,50.0%
+A1D_Het,61_cohortF,22.3%,22%,15%,62%,25.9%,33.3%,7.6%
+A1D_KO,82_cohortF,48.4%,97%,1%,1%,71.8%,0.0%,50.0%
+A1D_Wt,42_cohortF,49.5%,5%,0%,95%,100.0%,nan%,6.2%
+A1D_Wt,51_cohortF,33.9%,78%,17%,5%,42.2%,85.0%,0.0%
+B6,11_cohortF,26.9%,0%,88%,12%,nan%,25.9%,28.3%
+B6,23_cohortF,57.0%,2%,96%,2%,33.3%,37.6%,100.0%
+C3H x B6,c3m1_cohortW,53.7%,32%,63%,5%,51.3%,56.5%,53.1%
+C3H x B6,c3m2_cohortW,59.9%,59%,38%,3%,53.9%,69.6%,44.4%
